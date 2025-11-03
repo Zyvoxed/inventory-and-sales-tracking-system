@@ -1,0 +1,145 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 100vh;
+  background-color: #0d1b2a;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem;
+  box-sizing: border-box;
+  z-index: 1000;
+}
+
+.sidebar-header {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 2.5rem;
+  color: #fff;
+  text-align: left;
+  padding-left: 0.5rem;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: 100%;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #cfd8e3;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+  background-color: #1b263b;
+  color: #fff;
+}
+
+.sidebar-link svg {
+  color: #cfd8e3;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.sidebar-link:hover svg,
+.sidebar-link.active svg {
+  color: #fff;
+}
+
+/* Space the menu nicely and make logout stay at bottom */
+.sidebar-menu {
+  flex: 1;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+/* src/Components/Sidebar.css */
+
+.sidebar {
+  width: 240px;
+  min-width: 240px;
+  background-color: #1e293b;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #cbd5e1;
+  text-decoration: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+
+.sidebar-link.active,
+.sidebar-link:hover {
+  background-color: #334155;
+  color: white;
+}
+
+.sidebar-header {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 1rem 1.5rem;
+}
+
+.sidebar-footer {
+  padding: 1rem;
+  border-top: 1px solid #334155;
+}
+
+/* Responsive Sidebar for smaller screens */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 70px;
+    padding: 1.2rem 0.3rem;
+  }
+
+  .sidebar-header {
+    display: none;
+  }
+
+  .sidebar-link span {
+    display: none;
+  }
+
+  .sidebar-link {
+    justify-content: center;
+  }
+
+  .sidebar-footer {
+    border-top: none;
+  }
+}

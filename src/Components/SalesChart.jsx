@@ -21,7 +21,6 @@ const data = [
 export default function SalesChart() {
   return (
     <div className="sales-chart">
-      <h4>Sales by Category</h4>
       <ResponsiveContainer width="100%" height={250}>
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />

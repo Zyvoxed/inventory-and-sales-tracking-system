@@ -9,12 +9,12 @@ export default function Settings() {
 
   const handleSave = (e) => {
     e.preventDefault();
-    alert(`Settings saved!\nName: ${name}\nTheme: ${theme}`);
+    alert(`Settings Saved!\nName: ${name}\nTheme: ${theme}`);
   };
 
   return (
-    <div className="settings-page">
-      <h1 className="settings-title">Settings</h1>
+    <div className="dashboard">
+      <h1 className="page-title">Settings</h1>
       <div className="settings-card">
         <h2>Profile Settings</h2>
         <form onSubmit={handleSave} className="settings-form">

@@ -1,0 +1,166 @@
+  /* SEARCH + SORT */
+  .top-controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-bottom: 0.5rem;
+  }
+  
+  .top-controls input {
+    padding: 10px 15px;
+    width: 260px;
+    border-radius: 10px;
+    border: 1px solid #d3d7de;
+    background: white;
+    outline: none;
+    font-size: 0.9rem;
+  }
+  
+  .sort-btn {
+    height: 43px;
+    padding: 1px 8px;
+    background: #859bd8;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  /* CATEGORY TABS */
+  .category-tabs {
+    border-radius: 10px;
+    padding: 15px;
+    width: 1080px;
+    background: #ffffff;
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1rem;
+  }
+  
+  .category-tabs button {
+    padding: 10px 45px;
+    background: #ffffff;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: #333;
+    transition: 0.3s;
+  }
+  
+  .category-tabs button:hover {
+    background: #d6dae3;
+  }
+  
+  .category-tabs .active {
+    background: #1f2a40;
+    color: white;
+  }
+  
+  /* MAIN GRID */
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 1.5rem;
+  }
+  
+  /* PRODUCT TABLE WRAPPER */
+  .product-table {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* TABLE */
+  .product-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  
+  .product-table th {
+    text-align: center;
+    padding-bottom: 10px;
+    font-weight: 600;
+    color: #555;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .product-table td {
+    text-align: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  .product-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+  
+  /* ACTION BUTTONS */
+  .edit-btn,
+  .delete-btn {
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    color: white;
+    font-size: 0.85rem;
+  }
+  
+  .edit-btn {
+    background: #9bb8e7;
+    margin-right: 6px;
+  }
+  
+  .delete-btn {
+    background: #ec9494;
+  }
+  
+  /* ADD PRODUCT SIDEBAR BOX */
+  .add-product {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    height: fit-content;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .add-product h2 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .add-product form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .add-product label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #444;
+  }
+  
+  .add-product input {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #fafafa;
+    font-size: 0.9rem;
+  }
+  
+  /* ADD / UPDATE BUTTON */
+  .add-btn {
+    margin-top: 10px;
+    padding: 10px;
+    background: #1f2a40;
+    color: white;
+    border: none;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  

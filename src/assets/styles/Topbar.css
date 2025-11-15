@@ -1,24 +1,31 @@
 .topbar {
+  position: fixed;        
+  top: 0;
+  left: 0;
+  width: 100%;       
+  z-index: 1000;      
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #f5f7fa;
+  background: none;
   padding: 10px 20px;
-  border-bottom: 1px solid #ddd;
+  box-sizing: border-box;
+  background: #ededed;
 }
 
-.search {
-  width: 300px;
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 20px;
-  outline: none;
+.company-name{
+  margin: 0;
+  padding-left: 25px;
+  padding-bottom: 0;
+  font-size: 25px;
+  font-weight: bold;
 }
 
 .user {
   display: flex;
   align-items: center;
   gap: 10px;
+  padding-right: 20px;
 }
 
 .avatar {
@@ -33,10 +40,11 @@
 }
 
 .name {
+  color: #1e1e2f;
   font-weight: 600;
 }
 
 .role {
-  font-size: 12px;
+  font-size: 15px;
   color: gray;
 }

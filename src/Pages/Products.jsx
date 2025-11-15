@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "../assets/styles/Products.css";
 
 export default function Products() {
   const [products, setProducts] = useState([
@@ -14,23 +15,24 @@ export default function Products() {
   });
 
   const [editId, setEditId] = useState(null);
+  const [search, setSearch] = useState("");
 
-  // Add or update product
+  // Add or Update
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!form.name || !form.category) return;
+
+    if (form.name.trim() === "" || form.stock === "" || form.price === "") {
+      window.alert("Please fill out all required fields.");
+      return;
+    }
 
     if (editId) {
-      const confirmUpdate = window.confirm(
-        "Are you sure you want to update this product?"
-      );
-      if (!confirmUpdate) return;
+      if (!window.confirm("Update this product?")) return;
 
       setProducts((prev) =>
-        prev.map((product) =>
-          product.id === editId ? { ...form, id: editId } : product
-        )
+        prev.map((p) => (p.id === editId ? { ...form, id: editId } : p))
       );
+
       setEditId(null);
     } else {
       setProducts([
@@ -49,16 +51,8 @@ export default function Products() {
 
   // Delete
   const handleDelete = (id) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this product?"
-    );
-    if (!confirmDelete) return;
-
-    setProducts(products.filter((product) => product.id !== id));
-    if (editId === id) {
-      setEditId(null);
-      setForm({ name: "", category: "", stock: "", price: "" });
-    }
+    if (!window.confirm("Delete this product?")) return;
+    setProducts(products.filter((p) => p.id !== id));
   };
 
   // Edit
@@ -72,93 +66,144 @@ export default function Products() {
     setEditId(product.id);
   };
 
+  // Search Filter
+  const filteredProducts = products.filter((p) =>
+    p.name.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <div className="dashboard">
-      <h1>Products</h1>
+      {/* PAGE TITLE */}
+      <h1 className="page-title">Products</h1>
 
-      <div className="card add-product-card">
-        <h2>{editId ? "Edit Product" : "Add Product"}</h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Product name"
-            value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
-          />
-          <input
-            type="text"
-            placeholder="Category"
-            value={form.category}
-            onChange={(e) => setForm({ ...form, category: e.target.value })}
-          />
-          <input
-            type="number"
-            placeholder="Stock"
-            value={form.stock}
-            onChange={(e) => setForm({ ...form, stock: e.target.value })}
-          />
-          <input
-            type="number"
-            placeholder="Price"
-            value={form.price}
-            onChange={(e) => setForm({ ...form, price: e.target.value })}
-          />
-          <button type="submit">{editId ? "Update" : "Add"}</button>
-        </form>
+      {/* SEARCH + SORT */}
+      <div className="top-controls">
+        <input
+          type="text"
+          placeholder="Search items"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+
+        <button className="sort-btn">⇅ Sort By</button>
       </div>
 
-      <div className="card product-table">
-        <h2>Product List</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Category</th>
-              <th>Stock</th>
-              <th>Price</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((p) => (
-              <tr key={p.id}>
-                <td>{p.name}</td>
-                <td>{p.category}</td>
-                <td>{p.stock}</td>
-                <td>₱{p.price}</td>
-                <td>
-                  <button
-                    onClick={() => handleEdit(p)}
-                    style={{
-                      backgroundColor: "#9bb8e7ff",
-                      color: "white",
-                      border: "none",
-                      padding: "6px 12px",
-                      borderRadius: "6px",
-                      marginRight: "8px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(p.id)}
-                    style={{
-                      backgroundColor: "#ec9494ff",
-                      color: "white",
-                      border: "none",
-                      padding: "6px 12px",
-                      borderRadius: "6px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    Delete
-                  </button>
-                </td>
+      {/* CATEGORY TABS */}
+      <div className="category-tabs">
+        <button className="active">Sports Shoes</button>
+        <button>Balls & Shuttlecocks</button>
+        <button>Apparel & Accessories</button>
+        <button>Equipment & Gear</button>
+        <button>Training & Fitness Tools</button>
+      </div>
+
+      {/* CONTENT GRID */}
+      <div className="content-grid">
+        {/* PRODUCT TABLE */}
+        <div className="product-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Stock</th>
+                <th>Price</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody>
+              {filteredProducts.length > 0 ? (
+                filteredProducts.map((p) => (
+                  <tr key={p.id}>
+                    <td>{p.name}</td>
+                    <td>{p.category}</td>
+                    <td>{p.stock}</td>
+                    <td>₱{p.price}</td>
+                    <td>
+                      <button
+                        className="edit-btn"
+                        onClick={() => handleEdit(p)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="delete-btn"
+                        onClick={() => handleDelete(p.id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan="5"
+                    style={{ textAlign: "center", padding: "20px" }}
+                  >
+                    No products found.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* ADD PRODUCT FORM */}
+        <div className="add-product">
+          <h2>{editId ? "Edit Product" : "Add Product"}</h2>
+
+          <form onSubmit={handleSubmit}>
+
+            <label>Product Name</label>
+            <input
+              type="text"
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+            />
+
+            <label>Category</label>
+            <input
+              type="text"
+              value={form.category}
+              onChange={(e) => setForm({ ...form, category: e.target.value })}
+            />
+
+            <label>Stock</label>
+            <input
+              type="number"
+              value={form.stock}
+              onChange={(e) =>
+                setForm({ ...form, stock: Number(e.target.value) })
+              }
+            />
+
+            <label>Price</label>
+            <input
+              type="number"
+              value={form.price}
+              onChange={(e) =>
+                setForm({ ...form, price: Number(e.target.value) })
+              }
+            />
+
+            <button type="submit" className="add-btn">
+              {editId ? "Update" : "Add"}
+            </button>
+
+            <button
+              type="button"
+              className="cancel-btn"
+              onClick={() => {
+                setForm({ name: "", category: "", stock: "", price: "" });
+                setEditId(null);
+              }}
+            >
+              Cancel
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

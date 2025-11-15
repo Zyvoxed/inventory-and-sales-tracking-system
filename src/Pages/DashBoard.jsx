@@ -1,39 +1,47 @@
-import React from "react";
+import React, { useState } from "react";
 import DashboardCards from "../Components/DashboardCards";
 import SalesChart from "../Components/SalesChart";
-import "../assets/styles/Dashboard.css";
 
 export default function Dashboard() {
+  const [open, setOpen] = useState(false);
+
   return (
     <div className="dashboard">
-      <h2 className="page-title">Dashboard</h2>
-
-      {/* Summary Cards */}
+      <h1 className="page-title">Dashboard</h1>
       <DashboardCards />
-
-      {/* Main layout */}
       <div className="main-grid">
-        <div className="left-grid">
-          <div className="chart-box">
-            <h3>Sales by Category</h3>
-            <SalesChart />
-          </div>
-          <div className="chart-box">
-            <h3>Orders Summary</h3>
-          </div>
-          <div className="chart-box">
-            <h3>Top item categories</h3>
-          </div>
-          <div className="chart-box">
-            <h3>Restock</h3>
+        {/* Sales Category */}
+        <div className="chart-box">
+          <h3>Sales by Category</h3>
+          <SalesChart />
+        </div>
+        {/* Stock Level WITH DROPDOWN */}
+        <div className="chart-box stock-box">
+          <div className="stock-header">
+            <h3>Stock Level</h3>
+            {/* Dropdown Button */}
+            <div className="dropdown">
+              <button 
+                className={`dropdown-btn ${open ? "open" : ""}`}
+                onClick={() => setOpen(!open)}
+              >
+                Category <span className="arrow"></span>
+              </button>
+              {open && (
+                <div className="dropdown-menu">
+                  <ul>
+                    <li>All Items</li>
+                    <li>Low Stock</li>
+                    <li>Out of Stock</li>
+                  </ul>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-
-        <div className="right-grid">
-          <div className="activity-box">
-            <h3>Recent Activity</h3>
-          </div>
-        </div>
+      </div>
+      <div className="restock-box">
+        <h3>Restock</h3>
       </div>
     </div>
   );

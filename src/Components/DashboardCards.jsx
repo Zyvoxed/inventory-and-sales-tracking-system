@@ -1,5 +1,5 @@
 import React from "react";
-import "../assets/styles/DashboardCards.css";
+import "../assets/styles/Dashboard.css";
 
 export default function DashboardCards() {
   const cards = [
@@ -9,6 +9,8 @@ export default function DashboardCards() {
     { title: "Out of Stock", value: "34" },
   ];
 
+  const topItems = { title: "Top Items", value: "Content here" };
+
   return (
     <div className="cards-grid">
       {cards.map((card, i) => (
@@ -17,6 +19,11 @@ export default function DashboardCards() {
           <p>{card.value}</p>
         </div>
       ))}
+
+      <div className="top-items-card">
+        <h4>{topItems.title}</h4>
+        <p>{topItems.value}</p>
+      </div>
     </div>
   );
 }

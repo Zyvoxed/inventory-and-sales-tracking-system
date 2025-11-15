@@ -61,7 +61,7 @@ export default function Categories() {
 
   return (
     <div className="dashboard">
-      <h1>Categories</h1>
+      <h1 className="page-title">Categories</h1>
 
       <div className="card">
         <h2>{editIndex !== null ? "Edit Category" : "Add Category"}</h2>

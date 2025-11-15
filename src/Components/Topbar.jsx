@@ -4,7 +4,8 @@ import "../assets/styles/Topbar.css";
 export default function Topbar() {
   return (
     <header className="topbar">
-      <input className="search" type="text" placeholder="Search products" />
+
+      <h1 className="company-name">Storix</h1>
 
       <div className="user">
         <img
@@ -14,7 +15,7 @@ export default function Topbar() {
         />
         <div className="info">
           <span className="name">Frieren Da Slayer</span>
-          <span className="role">lazy elf</span>
+          <span className="role">Admin</span>
         </div>
       </div>
     </header>

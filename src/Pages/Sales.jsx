@@ -73,7 +73,7 @@ export default function Sales() {
 
   return (
     <div className="dashboard">
-      <h1>Sales</h1>
+      <h1 className="page-title">Sales</h1>
 
       <div className="card">
         <h2>{editIndex !== null ? "Edit Sale" : "Add Sale"}</h2>

@@ -3,8 +3,48 @@ import "../assets/styles/Products.css";
 
 export default function Products() {
   const [products, setProducts] = useState([
-    { id: 1, name: "T-Shirt", category: "Clothing", stock: 50, price: 199 },
-    { id: 2, name: "Sneakers", category: "Footwear", stock: 25, price: 799 },
+    {
+      id: 1,
+      name: "Nike Air Max",
+      category: "Sports Shoes",
+      stock: 12,
+      price: 2499,
+    },
+    {
+      id: 2,
+      name: "Spalding Basketball",
+      category: "Balls & Shuttlecocks",
+      stock: 30,
+      price: 999,
+    },
+    {
+      id: 3,
+      name: "Yonex Shuttlecock",
+      category: "Balls & Shuttlecocks",
+      stock: 40,
+      price: 799,
+    },
+    {
+      id: 4,
+      name: "Adidas Jersey",
+      category: "Apparel & Accessories",
+      stock: 20,
+      price: 1499,
+    },
+    {
+      id: 5,
+      name: "Gym Gloves",
+      category: "Training & Fitness Tools",
+      stock: 15,
+      price: 499,
+    },
+    {
+      id: 6,
+      name: "Resistance Band Set",
+      category: "Equipment & Gear",
+      stock: 25,
+      price: 899,
+    },
   ]);
 
   const [form, setForm] = useState({
@@ -16,8 +56,20 @@ export default function Products() {
 
   const [editId, setEditId] = useState(null);
   const [search, setSearch] = useState("");
+  const [activeCategory, setActiveCategory] = useState("All");
 
-  // Add or Update
+  const [showSort, setShowSort] = useState(false);
+  const [sortOption, setSortOption] = useState("");
+
+  const categories = [
+    "All",
+    "Sports Shoes",
+    "Balls & Shuttlecocks",
+    "Apparel & Accessories",
+    "Equipment & Gear",
+    "Training & Fitness Tools",
+  ];
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -49,13 +101,11 @@ export default function Products() {
     setForm({ name: "", category: "", stock: "", price: "" });
   };
 
-  // Delete
   const handleDelete = (id) => {
     if (!window.confirm("Delete this product?")) return;
     setProducts(products.filter((p) => p.id !== id));
   };
 
-  // Edit
   const handleEdit = (product) => {
     setForm({
       name: product.name,
@@ -66,17 +116,27 @@ export default function Products() {
     setEditId(product.id);
   };
 
-  // Search Filter
-  const filteredProducts = products.filter((p) =>
-    p.name.toLowerCase().includes(search.toLowerCase())
-  );
+  let filteredProducts = products.filter((p) => {
+    const matchSearch = p.name.toLowerCase().includes(search.toLowerCase());
+    const matchCategory =
+      activeCategory === "All" || p.category === activeCategory;
+
+    return matchSearch && matchCategory;
+  });
+
+  if (sortOption === "stock-asc")
+    filteredProducts.sort((a, b) => a.stock - b.stock);
+  if (sortOption === "stock-desc")
+    filteredProducts.sort((a, b) => b.stock - a.stock);
+  if (sortOption === "price-asc")
+    filteredProducts.sort((a, b) => a.price - b.price);
+  if (sortOption === "price-desc")
+    filteredProducts.sort((a, b) => b.price - a.price);
 
   return (
     <div className="dashboard">
-      {/* PAGE TITLE */}
       <h1 className="page-title">Products</h1>
 
-      {/* SEARCH + SORT */}
       <div className="top-controls">
         <input
           type="text"
@@ -85,21 +145,66 @@ export default function Products() {
           onChange={(e) => setSearch(e.target.value)}
         />
 
-        <button className="sort-btn">⇅ Sort By</button>
+        <div className="sort-container">
+          <button
+            className="sort-btn"
+            onClick={() => setShowSort((prev) => !prev)}
+          >
+            ⇅ Sort By
+          </button>
+
+          {showSort && (
+            <div className="sort-dropdown">
+              <p
+                onClick={() => {
+                  setSortOption("stock-asc");
+                  setShowSort(false);
+                }}
+              >
+                Stock: Low → High
+              </p>
+              <p
+                onClick={() => {
+                  setSortOption("stock-desc");
+                  setShowSort(false);
+                }}
+              >
+                Stock: High → Low
+              </p>
+              <p
+                onClick={() => {
+                  setSortOption("price-asc");
+                  setShowSort(false);
+                }}
+              >
+                Price: Low → High
+              </p>
+              <p
+                onClick={() => {
+                  setSortOption("price-desc");
+                  setShowSort(false);
+                }}
+              >
+                Price: High → Low
+              </p>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* CATEGORY TABS */}
       <div className="category-tabs">
-        <button className="active">Sports Shoes</button>
-        <button>Balls & Shuttlecocks</button>
-        <button>Apparel & Accessories</button>
-        <button>Equipment & Gear</button>
-        <button>Training & Fitness Tools</button>
+        {categories.map((cat) => (
+          <button
+            key={cat}
+            className={activeCategory === cat ? "active" : ""}
+            onClick={() => setActiveCategory(cat)}
+          >
+            {cat}
+          </button>
+        ))}
       </div>
 
-      {/* CONTENT GRID */}
       <div className="content-grid">
-        {/* PRODUCT TABLE */}
         <div className="product-table">
           <table>
             <thead>
@@ -113,49 +218,33 @@ export default function Products() {
             </thead>
 
             <tbody>
-              {filteredProducts.length > 0 ? (
-                filteredProducts.map((p) => (
-                  <tr key={p.id}>
-                    <td>{p.name}</td>
-                    <td>{p.category}</td>
-                    <td>{p.stock}</td>
-                    <td>₱{p.price}</td>
-                    <td>
-                      <button
-                        className="edit-btn"
-                        onClick={() => handleEdit(p)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="delete-btn"
-                        onClick={() => handleDelete(p.id)}
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan="5"
-                    style={{ textAlign: "center", padding: "20px" }}
-                  >
-                    No products found.
+              {filteredProducts.map((p) => (
+                <tr key={p.id}>
+                  <td>{p.name}</td>
+                  <td>{p.category}</td>
+                  <td>{p.stock}</td>
+                  <td>₱{p.price}</td>
+                  <td>
+                    <button className="edit-btn" onClick={() => handleEdit(p)}>
+                      Edit
+                    </button>
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDelete(p.id)}
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
-              )}
+              ))}
             </tbody>
           </table>
         </div>
 
-        {/* ADD PRODUCT FORM */}
         <div className="add-product">
           <h2>{editId ? "Edit Product" : "Add Product"}</h2>
 
           <form onSubmit={handleSubmit}>
-
             <label>Product Name</label>
             <input
               type="text"

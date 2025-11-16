@@ -1,4 +1,3 @@
-// src/Pages/Settings.jsx
 import React, { useState } from "react";
 import { useTheme } from "../Context/ThemeContext";
 import "../assets/styles/Settings.css";

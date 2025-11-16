@@ -10,16 +10,13 @@ export default function Dashboard() {
       <h1 className="page-title">Dashboard</h1>
       <DashboardCards />
       <div className="main-grid">
-        {/* Sales Category */}
         <div className="chart-box">
           <h3>Sales by Category</h3>
           <SalesChart />
         </div>
-        {/* Stock Level WITH DROPDOWN */}
         <div className="chart-box stock-box">
           <div className="stock-header">
             <h3>Stock Level</h3>
-            {/* Dropdown Button */}
             <div className="dropdown">
               <button 
                 className={`dropdown-btn ${open ? "open" : ""}`}
@@ -40,6 +37,7 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+      
       <div className="restock-box">
         <h3>Restock</h3>
       </div>

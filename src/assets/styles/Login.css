@@ -78,12 +78,11 @@
   position: absolute;
 }
 
-
 .admin-company-icon {
   position: absolute;
   width: 30px;
   height: auto;
-  top: 23px;
+  top: 27px;
   left: 520px;
 }
 
@@ -108,23 +107,24 @@
 .admin-login-form input {
   padding: 0.5rem;
   font-size: 1rem;
-  width: 200px;
+  width: 320px;
 }
 
 .admin-login-form button {
   padding: 0.5rem;
   font-size: 1rem;
-  background-color: black;
+  background-color: #222B40;
   color: white;
   border: none;
   cursor: pointer;;
 }
 
 .toggle-button {
+  position: absolute;
+  right: 295px;
+  top: 470px;
   text-align: center;
-  margin: 1rem;
-  background-color: black;
-  color: white;
+  color: rgb(0, 0, 0);
   border: none;
   cursor: pointer;
   border-radius: 6px;

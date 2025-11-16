@@ -7,7 +7,6 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import "../assets/styles/SalesChart.css";
 
 const data = [
   { name: "Men's Clothing", sales: 4000 },

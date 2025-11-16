@@ -21,7 +21,7 @@ export default function DashboardCards() {
       ))}
 
       <div className="top-items-card">
-        <h4>{topItems.title}</h4>
+        <h3>{topItems.title}</h3>
         <p>{topItems.value}</p>
       </div>
     </div>

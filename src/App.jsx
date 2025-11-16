@@ -25,13 +25,12 @@ function AppLayout() {
       <div className="app-content">
         {!hideLayout && <Topbar />}
         <Routes>
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/*" element={<Dashboard />} />
           <Route path="/products" element={<Products />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/sales" element={<Sales />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/admin-login" element={<AdminLogin onLogin={() => setIsLoggedIn(true)} />} />
-          <Route path="*" element={<h1>404 - Page Not Found</h1>} />
         </Routes>
       </div>
     </div>

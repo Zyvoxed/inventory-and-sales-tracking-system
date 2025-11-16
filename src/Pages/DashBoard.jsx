@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import DashboardCards from "../Components/DashboardCards";
 import SalesChart from "../Components/SalesChart";
-import Products from "./Products";
 
 export default function Dashboard() {
   const [open, setOpen] = useState(false);
@@ -14,7 +13,7 @@ export default function Dashboard() {
     { id: 4, item: "Gym Gloves", qty: 1, total: 1200 },
     { id: 5, item: "Jacket", qty: 1, total: 1200 },
     { id: 6, item: "T-shirts", qty: 1, total: 1200 },
-    { id: 7, item: "otenus", qty: 1, total: 123 },
+    { id: 7, item: "Shoes", qty: 1, total: 123 },
     { id: 8, item: "Jacket", qty: 1, total: 1230 },
     { id: 9, item: "Jacket", qty: 1, total: 2940193 },
     { id: 10, item: "Jacket", qty: 1, total: 23131 },

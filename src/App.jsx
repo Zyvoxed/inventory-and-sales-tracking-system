@@ -1,10 +1,16 @@
-import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
 import Sidebar from "./Components/Sidebar";
 import Topbar from "./Components/Topbar";
 import Dashboard from "./Pages/DashBoard";
 import Products from "./Pages/Products";
 import Sales from "./Pages/Sales";
-import Settings from "./Pages/Settings";
+import Accounts from "./Pages/Accounts";
 import AdminLogin from "./Pages/Login";
 import { ThemeProvider } from "./Context/ThemeContext";
 import "./assets/styles/App.css";
@@ -27,8 +33,11 @@ function AppLayout() {
           <Route path="/*" element={<Dashboard />} />
           <Route path="/products" element={<Products />} />
           <Route path="/sales" element={<Sales />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/admin-login" element={<AdminLogin onLogin={() => setIsLoggedIn(true)} />} />
+          <Route path="/settings" element={<Accounts />} />
+          <Route
+            path="/admin-login"
+            element={<AdminLogin onLogin={() => setIsLoggedIn(true)} />}
+          />
         </Routes>
       </div>
     </div>

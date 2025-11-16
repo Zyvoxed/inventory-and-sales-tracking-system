@@ -106,47 +106,22 @@ export default function Dashboard() {
       </div>
 
       <div className="restock-box">
-        <h3>Upcoming Restock</h3>
+        <h3>Low Stock Alerts</h3>
 
-        <div className="restock-grid">
-          {/* LEFT SIDE — LOW STOCK ITEMS */}
-          <div className="restock-left">
-            <h4 className="section-title">Low Stock Alerts</h4>
-
-            <div className="restock-item">
-              <span className="restock-name">Mizuno Jersey</span>
-              <span className="restock-warning">Only 5 left!</span>
-            </div>
-
-            <div className="restock-item">
-              <span className="restock-name">Agility Cones</span>
-              <span className="restock-warning">Low: 8 units</span>
-            </div>
-
-            <div className="restock-item">
-              <span className="restock-name">Shuttlecock Tube</span>
-              <span className="restock-warning">Critical: 3 units</span>
-            </div>
+        <div className="restock-list">
+          <div className="restock-item">
+            <span className="restock-name">Mizuno Jersey</span>
+            <span className="restock-warning">Only 5 left!</span>
           </div>
 
-          {/* RIGHT SIDE — EXPECTED DELIVERY DATES */}
-          <div className="restock-right">
-            <h4 className="section-title">Expected Arrival</h4>
+          <div className="restock-item">
+            <span className="restock-name">Agility Cones</span>
+            <span className="restock-warning">Low: 8 units</span>
+          </div>
 
-            <div className="restock-item">
-              <span className="restock-name">Mizuno Jersey</span>
-              <span className="restock-date">Arrives: Nov 25, 2025</span>
-            </div>
-
-            <div className="restock-item">
-              <span className="restock-name">Agility Cones</span>
-              <span className="restock-date">Arrives: Nov 27, 2025</span>
-            </div>
-
-            <div className="restock-item">
-              <span className="restock-name">Shuttlecock Tube</span>
-              <span className="restock-date">Arrives: Dec 2, 2025</span>
-            </div>
+          <div className="restock-item">
+            <span className="restock-name">Shuttlecock Tube</span>
+            <span className="restock-warning">Critical: 3 units</span>
           </div>
         </div>
       </div>

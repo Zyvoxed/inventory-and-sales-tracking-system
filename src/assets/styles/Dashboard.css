@@ -110,23 +110,11 @@
   font-weight: 700;
   color: #6b7280;
 }
-.restock-grid {
-  display: flex;
-  gap: 20px;
+.restock-list {
   margin-top: 15px;
-  position: relative;
-}
-
-.restock-left,
-.restock-right {
-  width: 50%;
-}
-
-.section-title {
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 10px;
-  color: #1a1a1a;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .restock-item {
@@ -144,22 +132,6 @@
 .restock-warning {
   color: #d9534f; /* red */
   font-weight: 700;
-}
-
-.restock-date {
-  color: #2563eb; /* blue */
-  font-weight: 700;
-}
-
-/* Line separator */
-.restock-grid::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 0;
-  width: 1px;
-  height: 100%;
-  background: #dcdcdc;
 }
 
 .stock-header {

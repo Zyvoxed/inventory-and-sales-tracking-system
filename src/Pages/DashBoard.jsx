@@ -40,6 +40,7 @@ export default function Dashboard() {
       
       <div className="restock-box">
         <h3>Restock</h3>
+        <p>Contents</p>
       </div>
     </div>
   );

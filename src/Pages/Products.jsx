@@ -6,46 +6,60 @@ export default function Products() {
     {
       id: 1,
       name: "Nike Air Max",
-      category: "Sports Shoes",
+      category: "Category A",
       stock: 12,
       price: 2499,
     },
     {
       id: 2,
       name: "Spalding Basketball",
-      category: "Balls & Shuttlecocks",
+      category: "Category A",
       stock: 30,
       price: 999,
     },
     {
       id: 3,
       name: "Yonex Shuttlecock",
-      category: "Balls & Shuttlecocks",
+      category: "Category B",
       stock: 40,
       price: 799,
     },
     {
       id: 4,
       name: "Adidas Jersey",
-      category: "Apparel & Accessories",
+      category: "Category C",
       stock: 20,
       price: 1499,
     },
     {
       id: 5,
       name: "Gym Gloves",
-      category: "Training & Fitness Tools",
+      category: "Category D",
       stock: 15,
       price: 499,
     },
     {
       id: 6,
       name: "Resistance Band Set",
-      category: "Equipment & Gear",
+      category: "Category E",
       stock: 25,
       price: 899,
     },
   ]);
+
+  const [categories, setCategories] = useState([
+    "All",
+    "Category A",
+    "Category B",
+    "Category C",
+    "Category D",
+    "Category E",
+  ]);
+
+  const [showCatTable, setShowCatTable] = useState(false);
+  const [newCategory, setNewCategory] = useState("");
+  const [editCatIndex, setEditCatIndex] = useState(null);
+  const [editCatName, setEditCatName] = useState("");
 
   const [form, setForm] = useState({
     name: "",
@@ -58,18 +72,11 @@ export default function Products() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
 
+  /* SORT STATES */
   const [showSort, setShowSort] = useState(false);
   const [sortOption, setSortOption] = useState("");
 
-  const categories = [
-    "All",
-    "Sports Shoes",
-    "Balls & Shuttlecocks",
-    "Apparel & Accessories",
-    "Equipment & Gear",
-    "Training & Fitness Tools",
-  ];
-
+  /* SUBMIT HANDLER */
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -101,11 +108,13 @@ export default function Products() {
     setForm({ name: "", category: "", stock: "", price: "" });
   };
 
+  /* DELETE PRODUCT */
   const handleDelete = (id) => {
     if (!window.confirm("Delete this product?")) return;
     setProducts(products.filter((p) => p.id !== id));
   };
 
+  /* EDIT PRODUCT */
   const handleEdit = (product) => {
     setForm({
       name: product.name,
@@ -116,6 +125,7 @@ export default function Products() {
     setEditId(product.id);
   };
 
+  /* FILTER */
   let filteredProducts = products.filter((p) => {
     const matchSearch = p.name.toLowerCase().includes(search.toLowerCase());
     const matchCategory =
@@ -124,6 +134,7 @@ export default function Products() {
     return matchSearch && matchCategory;
   });
 
+  /* SORTING */
   if (sortOption === "stock-asc")
     filteredProducts.sort((a, b) => a.stock - b.stock);
   if (sortOption === "stock-desc")
@@ -137,7 +148,15 @@ export default function Products() {
     <div className="dashboard">
       <h1 className="page-title">Products</h1>
 
+      {/* TOP CONTROLS */}
       <div className="top-controls">
+        <button
+          className="category-manage-btn"
+          onClick={() => setShowCatTable((prev) => !prev)}
+        >
+          Manage Categories
+        </button>
+
         <input
           type="text"
           placeholder="Search items"
@@ -192,6 +211,99 @@ export default function Products() {
         </div>
       </div>
 
+      {/* CATEGORY POPUP */}
+      {showCatTable && (
+        <div className="category-popup">
+          <h3>Manage Categories</h3>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {categories.map((cat, index) =>
+                cat !== "All" ? (
+                  <tr key={index}>
+                    <td>
+                      {editCatIndex === index ? (
+                        <input
+                          type="text"
+                          value={editCatName}
+                          onChange={(e) => setEditCatName(e.target.value)}
+                        />
+                      ) : (
+                        cat
+                      )}
+                    </td>
+
+                    <td>
+                      {editCatIndex === index ? (
+                        <button
+                          className="save-btn"
+                          onClick={() => {
+                            const updated = [...categories];
+                            updated[index] = editCatName;
+                            setCategories(updated);
+                            setEditCatIndex(null);
+                          }}
+                        >
+                          Save
+                        </button>
+                      ) : (
+                        <button
+                          className="edit-btn"
+                          onClick={() => {
+                            setEditCatIndex(index);
+                            setEditCatName(cat);
+                          }}
+                        >
+                          Edit
+                        </button>
+                      )}
+
+                      <button
+                        className="delete-btn"
+                        onClick={() =>
+                          setCategories(
+                            categories.filter((_, i) => i !== index)
+                          )
+                        }
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ) : null
+              )}
+            </tbody>
+          </table>
+
+          <div className="add-cat-row">
+            <input
+              type="text"
+              placeholder="New Category"
+              value={newCategory}
+              onChange={(e) => setNewCategory(e.target.value)}
+            />
+            <button
+              className="add-btn"
+              onClick={() => {
+                if (!newCategory.trim()) return;
+                setCategories([...categories, newCategory]);
+                setNewCategory("");
+              }}
+            >
+              Add
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* CATEGORY TABS */}
       <div className="category-tabs">
         {categories.map((cat) => (
           <button
@@ -205,6 +317,7 @@ export default function Products() {
       </div>
 
       <div className="content-grid">
+        {/* PRODUCT TABLE */}
         <div className="product-table">
           <table>
             <thead>
@@ -241,6 +354,7 @@ export default function Products() {
           </table>
         </div>
 
+        {/* ADD PRODUCT FORM */}
         <div className="add-product">
           <h2>{editId ? "Edit Product" : "Add Product"}</h2>
 

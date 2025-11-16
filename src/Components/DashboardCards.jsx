@@ -9,8 +9,6 @@ export default function DashboardCards() {
     { title: "Out of Stock", value: "34" },
   ];
 
-  const topItems = { title: "Top Items", value: "Content here" };
-
   return (
     <div className="cards-grid">
       {cards.map((card, i) => (
@@ -21,8 +19,8 @@ export default function DashboardCards() {
       ))}
 
       <div className="top-items-card">
-        <h3>{topItems.title}</h3>
-        <p>{topItems.value}</p>
+        <h3>Top Items</h3>
+        <p>Contents</p>
       </div>
     </div>
   );

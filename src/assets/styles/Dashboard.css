@@ -112,6 +112,12 @@
   color: #111827;
 }
 
+.restock-box p {
+  font-size: 15px;       
+  font-weight: 700;
+  color: #6b7280;          
+}
+
 .stock-header {
   display: flex;
   justify-content: space-between;

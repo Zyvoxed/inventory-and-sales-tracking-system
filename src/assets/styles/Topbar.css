@@ -1,9 +1,9 @@
 .topbar {
-  position: fixed;        
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;       
-  z-index: 1000;      
+  width: 100%;
+  z-index: 1000;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -13,7 +13,8 @@
   background: #ededed;
 }
 
-.company-name{
+.company-name {
+  font-family: "Poppins", sans-serif;
   margin: 0;
   padding-left: 25px;
   padding-bottom: 0;

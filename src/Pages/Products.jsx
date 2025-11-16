@@ -72,11 +72,9 @@ export default function Products() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
 
-  /* SORT STATES */
   const [showSort, setShowSort] = useState(false);
   const [sortOption, setSortOption] = useState("");
 
-  /* SUBMIT HANDLER */
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -108,13 +106,11 @@ export default function Products() {
     setForm({ name: "", category: "", stock: "", price: "" });
   };
 
-  /* DELETE PRODUCT */
   const handleDelete = (id) => {
     if (!window.confirm("Delete this product?")) return;
     setProducts(products.filter((p) => p.id !== id));
   };
 
-  /* EDIT PRODUCT */
   const handleEdit = (product) => {
     setForm({
       name: product.name,
@@ -125,7 +121,6 @@ export default function Products() {
     setEditId(product.id);
   };
 
-  /* FILTER */
   let filteredProducts = products.filter((p) => {
     const matchSearch = p.name.toLowerCase().includes(search.toLowerCase());
     const matchCategory =
@@ -134,7 +129,6 @@ export default function Products() {
     return matchSearch && matchCategory;
   });
 
-  /* SORTING */
   if (sortOption === "stock-asc")
     filteredProducts.sort((a, b) => a.stock - b.stock);
   if (sortOption === "stock-desc")
@@ -148,7 +142,6 @@ export default function Products() {
     <div className="dashboard">
       <h1 className="page-title">Products</h1>
 
-      {/* TOP CONTROLS */}
       <div className="top-controls">
         <button
           className="category-manage-btn"
@@ -211,7 +204,6 @@ export default function Products() {
         </div>
       </div>
 
-      {/* CATEGORY POPUP */}
       {showCatTable && (
         <div className="category-popup">
           <h3>Manage Categories</h3>
@@ -303,7 +295,6 @@ export default function Products() {
         </div>
       )}
 
-      {/* CATEGORY TABS */}
       <div className="category-tabs">
         {categories.map((cat) => (
           <button
@@ -317,7 +308,6 @@ export default function Products() {
       </div>
 
       <div className="content-grid">
-        {/* PRODUCT TABLE */}
         <div className="product-table">
           <table>
             <thead>
@@ -354,7 +344,6 @@ export default function Products() {
           </table>
         </div>
 
-        {/* ADD PRODUCT FORM */}
         <div className="add-product">
           <h2>{editId ? "Edit Product" : "Add Product"}</h2>
 

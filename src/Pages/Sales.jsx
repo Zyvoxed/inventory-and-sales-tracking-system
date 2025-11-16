@@ -3,8 +3,8 @@ import "../assets/styles/Sales.css";
 
 export default function Sales() {
   const [users] = useState([
-    { id: 1, name: "Alice" },
-    { id: 2, name: "Bob" },
+    { id: 1, name: "Cashier 1" },
+    { id: 2, name: "Cashier 2" },
   ]);
 
   const [selectedUser, setSelectedUser] = useState(users[0].id);
@@ -13,6 +13,7 @@ export default function Sales() {
     1: [
       { id: 1, item: "T-Shirt", qty: 2, total: 398 },
       { id: 2, item: "Sneakers", qty: 1, total: 799 },
+      { id: 2, item: "Gym Gloves", qty: 10, total: 799 },
     ],
     2: [
       { id: 3, item: "Hat", qty: 3, total: 597 },
@@ -29,7 +30,7 @@ export default function Sales() {
 
   return (
     <div className="dashboard">
-      <h1>Sales Report</h1>
+      <h1 className="page-title">Sales Report</h1>
 
       <div className="sales-form">
         <label htmlFor="user-select">Select User:</label>

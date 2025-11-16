@@ -1,7 +1,7 @@
 import React from "react";
 import "../assets/styles/Dashboard.css";
 
-export default function DashboardCards() {
+export default function DashboardCards({ topItems }) {
   const cards = [
     { title: "Total Products", value: "12,345" },
     { title: "Available Stock", value: "1,234" },
@@ -18,9 +18,26 @@ export default function DashboardCards() {
         </div>
       ))}
 
-      <div className="top-items-card">
-        <h3>Top Items</h3>
-        <p>Contents</p>
+      {/* 🟦 TOP ITEMS SCROLL CARD */}
+      <div className="top-items-card scroll-card">
+        <h3>Top Selling Items</h3>
+
+        <div className="scroll-list">
+          {topItems.length === 0 ? (
+            <p>No items found</p>
+          ) : (
+            topItems.map((item) => (
+              <div key={item.id} className="scroll-item">
+                <div>
+                  <span className="item-name">{item.item}</span>
+                  <br />
+                  <span className="item-qty">Qty: {item.qty}</span>
+                </div>
+                <span className="item-value">₱{item.total}</span>
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );

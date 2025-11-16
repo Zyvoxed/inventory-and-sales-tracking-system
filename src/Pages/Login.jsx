@@ -19,13 +19,13 @@ function EmployeeLogin({ onLogin }) {
 
   return (
     <div className="admin-login-container">
-      <div className={`admin-intro-text ${toggled ? 'box-right' : 'box-left'}`}>
-      <h1 className="admin-company-title">Storix</h1>
-          <img
-            src="src/assets/images/storix.png"
-            alt="Box Icon"
-            className="admin-company-icon"
-          />
+      <div className={`admin-intro-text ${toggled ? "box-right" : "box-left"}`}>
+        <h1 className="admin-company-title">Storix</h1>
+        <img
+          src="src/assets/images/storix.png"
+          alt="Box Icon"
+          className="admin-company-icon"
+        />
         <div className="admin-text-content">
           <h1>Web-Based Inventory and Sales Tracking System</h1>
           <p>
@@ -40,9 +40,10 @@ function EmployeeLogin({ onLogin }) {
         </div>
       </div>
 
-      <div className={`admin-login-form ${toggled ? 'form-right' : 'form-left'}`}>
+      <div
+        className={`admin-login-form ${toggled ? "form-right" : "form-left"}`}
+      >
         <div className="admin-form-content">
-
           <form onSubmit={handleSubmit}>
             <h2>{toggled ? "Cashier Login" : "Admin Login"}</h2>
             <input type="email" name="email" placeholder="Email" required />

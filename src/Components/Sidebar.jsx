@@ -3,7 +3,6 @@ import { NavLink } from "react-router-dom";
 import {
   FaTachometerAlt,
   FaBox,
-  FaTags,
   FaChartBar,
   FaCog,
   FaSignOutAlt,
@@ -14,7 +13,6 @@ export default function Sidebar() {
   return (
     <aside className="sidebar">
       <nav className="sidebar-menu">
-
         {/* DISCOVER SECTION */}
         <h2 className="sidebar-section">DISCOVER</h2>
         <NavLink
@@ -50,7 +48,7 @@ export default function Sidebar() {
         </NavLink>
 
         {/* SETTINGS SECTION */}
-        <h2 className="sidebar-section">SETTINGS</h2>
+        <h2 className="sidebar-section">ACCOUNT SETTINGS</h2>
         <NavLink
           to="/settings"
           className={({ isActive }) =>
@@ -58,7 +56,7 @@ export default function Sidebar() {
           }
         >
           <FaCog />
-          <span>Settings</span>
+          <span>Accounts</span>
         </NavLink>
       </nav>
 

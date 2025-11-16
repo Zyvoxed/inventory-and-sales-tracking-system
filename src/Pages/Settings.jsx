@@ -13,7 +13,7 @@ export default function Settings() {
 
   return (
     <div className="dashboard">
-      <h1 className="page-title">Settings</h1>
+      <h1 className="page-title">Manage Accounts</h1>
       <div className="settings-card">
         <h2>Profile Settings</h2>
         <form onSubmit={handleSave} className="settings-form">

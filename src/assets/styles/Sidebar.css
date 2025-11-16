@@ -14,8 +14,10 @@
 }
 
 .sidebar-section {
-  font-size: 0.85rem;
-  font-weight: 500;
+  font-family: "IBM Plex Sans Hebrew", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 0.8rem;
   color: #9ca3af;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -29,24 +31,25 @@
   flex-direction: column;
   gap: 0.6rem;
   width: 100%;
-  margin-top: 1rem;
+  margin-top: -10px;
 }
 
 .sidebar-link {
+  font-family: "Poppins", sans-serif;
   display: flex;
   align-items: center;
   gap: 10px;
   color: #cbd5e1;
   text-decoration: none;
-  padding: 10px 16px;
+  padding: 8px 10px;
   border-radius: 8px;
   transition: 0.3s;
   width: 100%;
   box-sizing: border-box;
-  font-size: 15px;
+  font-size: 0.85rem;
 }
 
-.sidebar-link:hover{
+.sidebar-link:hover {
   background-color: #96b5ff;
   color: #000000;
 }
@@ -67,8 +70,8 @@
 }
 
 .sidebar-footer {
-  padding: 0rem;
-  margin-top: auto;
+  padding: 1rem;
+  margin-top: 9rem;
   border-top: 1px solid #334155;
 }
 

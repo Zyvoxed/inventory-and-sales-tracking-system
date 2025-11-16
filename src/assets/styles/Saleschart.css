@@ -1,0 +1,90 @@
+/* Chart wrapper */
+.chart-box {
+  border-radius: 12px;
+  padding: 25px;
+  font-size: 15px;
+  color: #c62c2c;
+  padding-bottom: 65px;
+}
+
+/* Header (Sales by Category + This Year) */
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.chart-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #111827;
+  font-weight: 600;
+}
+
+.chart-year {
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Chart + Right Side Layout */
+.chart-content {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+/* Left Pie Chart */
+.chart-left {
+  width: 45%;
+}
+
+/* Right Profit + Category List */
+.chart-right {
+  width: 55%;
+}
+
+.profit-title {
+  color: #6b7280;
+  font-size: 14px;
+  margin: 0;
+}
+
+.profit-value {
+  font-size: 32px;
+  font-weight: bold;
+  margin-top: -5px;
+  margin-bottom: 20px;
+  color: #111827;
+}
+
+/* Category List */
+.category-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.category-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: left;
+  font-size: 11.5px;
+  margin-bottom: 15px;
+  color: #111827;
+  font-weight: 500;
+}
+
+/* Small Color Boxes */
+.color-box {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  margin-right: 10px;
+  border-radius: 3px;
+}
+
+.category-list li span.category-number {
+  color: #6b7280;
+  font-weight: 600;
+}

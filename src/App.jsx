@@ -3,7 +3,6 @@ import Sidebar from "./Components/Sidebar";
 import Topbar from "./Components/Topbar";
 import Dashboard from "./Pages/DashBoard";
 import Products from "./Pages/Products";
-import Categories from "./Pages/Categories";
 import Sales from "./Pages/Sales";
 import Settings from "./Pages/Settings";
 import AdminLogin from "./Pages/Login";
@@ -27,7 +26,6 @@ function AppLayout() {
         <Routes>
           <Route path="/*" element={<Dashboard />} />
           <Route path="/products" element={<Products />} />
-          <Route path="/categories" element={<Categories />} />
           <Route path="/sales" element={<Sales />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/admin-login" element={<AdminLogin onLogin={() => setIsLoggedIn(true)} />} />

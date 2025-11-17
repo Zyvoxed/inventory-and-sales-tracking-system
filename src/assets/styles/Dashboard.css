@@ -47,6 +47,8 @@
   color: #222b40;
 }
 .top-items-card {
+  font-family: "IBM Plex Sans Hebrew", sans-serif;
+  font-weight: 400;
   background: #fff;
   border-radius: 10px;
   padding: 25px;
@@ -90,6 +92,8 @@
   color: #111827;
 }
 .restock-box {
+  font-family: "IBM Plex Sans Hebrew", sans-serif;
+  font-weight: 400;
   height: 260px;
   width: 850px;
   background: #fff;
@@ -254,6 +258,8 @@
 
 /* SCROLLABLE TOP ITEMS CARD */
 .scroll-card {
+  font-family: "IBM Plex Sans Hebrew", sans-serif;
+  font-weight: 400;
   max-height: 480px;
   overflow: hidden;
   display: flex;

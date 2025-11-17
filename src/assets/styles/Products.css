@@ -76,7 +76,6 @@
   font-size: 0.85rem;
   color: #333;
   transition: 0.3s;
-  border-right: black;
 }
 
 .category-tabs button:hover {

@@ -1,7 +1,7 @@
 :root {
   font-family: "Inter", system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
-  background-color: #EDEDED;
+  background-color: #ededed;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -58,7 +58,7 @@ body {
   flex: 1;
   padding: 24px;
   background-color: #f3f4f6;
-  min-height: calc(100vh - 60px); /* Adjust height under topbar */
+  min-height: calc(100vh - 60px);
   width: 100%;
 }
 

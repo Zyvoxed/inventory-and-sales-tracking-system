@@ -42,7 +42,7 @@ export default function ManageAccounts() {
 
   return (
     <div className="dashboard">
-      <h1 className="accounts-title">Manage Accounts</h1>
+      <h1 className="page-title">Manage Accounts</h1>
 
       {accounts.map((acc, index) => (
         <div key={acc.id} className="account-box">

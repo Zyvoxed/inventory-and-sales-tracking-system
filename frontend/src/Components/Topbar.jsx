@@ -2,9 +2,10 @@ import React from "react";
 import "../assets/styles/Topbar.css";
 
 export default function Topbar() {
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+
   return (
     <header className="topbar">
-
       <h1 className="company-name">Storix</h1>
 
       <div className="user">
@@ -14,8 +15,8 @@ export default function Topbar() {
           className="avatar"
         />
         <div className="info">
-          <span className="name">Frieren Da Slayer</span>
-          <span className="role">Admin</span>
+          <span className="name">{user?.fullname || "User"}</span>
+          <span className="role">{user?.role || "Unknown"}</span>
         </div>
       </div>
     </header>

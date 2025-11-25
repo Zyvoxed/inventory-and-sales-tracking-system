@@ -23,48 +23,51 @@ function AppLayout() {
   const location = useLocation();
   const user = JSON.parse(localStorage.getItem("user") || "null");
 
-  // we want to hide Sidebar/Topbar for the login page
+  // we want to hide Sidebar/Topbar for login page
   const publicRoutes = ["/admin-login", "/"];
   const hideLayout = publicRoutes.includes(location.pathname.toLowerCase());
 
   return (
     <div className="app-layout">
-      {!hideLayout && user?.role === "Admin" && <Sidebar />}
+      {/* Show SAME SIDEBAR for both Admin and Cashier */}
+      {!hideLayout && user && <Sidebar />}
+
       <div className="app-content">
-        {!hideLayout && user?.role === "Admin" && <Topbar />}
+        {/* Topbar */}
+        {!hideLayout && user && <Topbar />}
 
         <Routes>
-          {/* default / goes to admin login */}
+          {/* Default route */}
           <Route path="/" element={<Navigate to="/admin-login" />} />
 
-          {/* Admin Login */}
+          {/* Login */}
           <Route path="/admin-login" element={<Login />} />
 
-          {/* Protected Admin Routes */}
+          {/* ----- ALLOW BOTH ADMIN & CASHIER TO ACCESS THESE ROUTES ----- */}
           <Route
             path="/dashboard"
-            element={user?.role === "Admin" ? <Dashboard /> : <Navigate to="/admin-login" />}
+            element={user ? <Dashboard /> : <Navigate to="/admin-login" />}
           />
 
           <Route
             path="/products"
-            element={user?.role === "Admin" ? <Products /> : <Navigate to="/admin-login" />}
+            element={user ? <Products /> : <Navigate to="/admin-login" />}
           />
 
           <Route
             path="/sales"
-            element={user?.role === "Admin" ? <Sales /> : <Navigate to="/admin-login" />}
+            element={user ? <Sales /> : <Navigate to="/admin-login" />}
           />
 
           <Route
             path="/settings"
-            element={user?.role === "Admin" ? <Accounts /> : <Navigate to="/admin-login" />}
+            element={user ? <Accounts /> : <Navigate to="/admin-login" />}
           />
 
-          {/* Cashier route: only accessible to Cashier role */}
+          {/* Cashier POS page */}
           <Route
             path="/cashier"
-            element={user?.role === "Cashier" ? <Cashier /> : <Navigate to="/admin-login" />}
+            element={user ? <Cashier /> : <Navigate to="/admin-login" />}
           />
 
           {/* Fallback */}

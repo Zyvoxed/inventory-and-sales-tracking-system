@@ -3,19 +3,9 @@ import axios from "axios";
 import "../assets/styles/Sales.css";
 
 export default function Sales() {
-  const [products, setProducts] = useState([]);
   const [salesList, setSalesList] = useState([]);
-  const [cart, setCart] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState("");
-  const [qty, setQty] = useState(1);
 
-  // Load products and sales
   useEffect(() => {
-    axios
-      .get("http://localhost:8081/product")
-      .then((res) => setProducts(res.data))
-      .catch(() => alert("Error loading products"));
-
     loadSales();
   }, []);
 
@@ -24,40 +14,6 @@ export default function Sales() {
       .get("http://localhost:8081/sales")
       .then((res) => setSalesList(res.data))
       .catch(() => alert("Error loading sales"));
-  };
-
-  const addToCart = () => {
-    if (!selectedProduct || qty <= 0) return;
-
-    const product = products.find((p) => p.ID == selectedProduct);
-    if (!product) return;
-
-    const subtotal = qty * product.Price;
-
-    setCart([
-      ...cart,
-      { product_id: product.ID, name: product.Name, quantity: qty, subtotal },
-    ]);
-    setSelectedProduct("");
-    setQty(1);
-  };
-
-  const totalCart = cart.reduce((sum, item) => sum + item.subtotal, 0);
-
-  const saveSale = () => {
-    if (cart.length === 0) return alert("Cart is empty");
-
-    axios
-      .post("http://localhost:8081/sale", { user_id: 1, items: cart })
-      .then(() => {
-        alert("Sale saved!");
-        setCart([]);
-        loadSales();
-      })
-      .catch((err) => {
-        console.error(err);
-        alert("Error saving sale. Check backend terminal.");
-      });
   };
 
   const deleteSale = (saleId) => {
@@ -90,60 +46,17 @@ export default function Sales() {
     return acc;
   }, {});
 
+  const saveSale = () => {
+    // Placeholder: actual sales are recorded by the cashier/POS.
+    // Keep this button here so you can wire it to the POS flow later.
+    alert("Use the cashier/POS to record a sale. This button is a placeholder.");
+    loadSales();
+  };
+
   return (
     <div className="dashboard">
-      <h1 className="page-title">Sales Report</h1>
+      <h1 className="page-title">Sales History</h1>
 
-      {/* ADD SALE */}
-      <div className="add-sale-box">
-        <h3>Add Sale</h3>
-        <select
-          value={selectedProduct}
-          onChange={(e) => setSelectedProduct(e.target.value)}
-        >
-          <option value="">Select product</option>
-          {products.map((p) => (
-            <option key={p.ID} value={p.ID}>
-              {p.Name} (₱{p.Price})
-            </option>
-          ))}
-        </select>
-        <input
-          type="number"
-          min="1"
-          value={qty}
-          onChange={(e) => setQty(Number(e.target.value))}
-        />
-        <button onClick={addToCart}>Add</button>
-      </div>
-
-      {/* CART */}
-      <table className="sales-table">
-        <thead>
-          <tr>
-            <th>Product</th>
-            <th>Qty</th>
-            <th>Subtotal</th>
-          </tr>
-        </thead>
-        <tbody>
-          {cart.map((item, i) => (
-            <tr key={i}>
-              <td>{item.name}</td>
-              <td>{item.quantity}</td>
-              <td>₱{item.subtotal}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <h2>Total: ₱{totalCart}</h2>
-      <button onClick={saveSale} className="save-btn">
-        Save Sale
-      </button>
-
-      {/* SALES HISTORY */}
-      <h2 className="page-title">Sales History</h2>
       <table className="sales-table">
         <thead>
           <tr>
@@ -168,6 +81,12 @@ export default function Sales() {
           ))}
         </tbody>
       </table>
+
+      <div style={{ marginTop: 16 }}>
+        <button onClick={saveSale} className="save-btn">
+          Save Sale
+        </button>
+      </div>
     </div>
   );
 }

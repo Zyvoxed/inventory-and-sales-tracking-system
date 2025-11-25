@@ -1,36 +1,54 @@
+// src/Pages/Login.jsx
 import "../assets/styles/Login.css";
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 
-function Login({ onLogin }) {
+function Login() {
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onLogin();
-    navigate("/dashboard");
-  };
-
-  const [toggled, setToggled] = useState(false); // actual role state
-  const [isFading, setIsFading] = useState(false); // controls fade-out / fade-in
+  const [toggled, setToggled] = useState(false); // false = Admin, true = Cashier
+  const [isFading, setIsFading] = useState(false);
 
   const handleToggle = () => {
-    if (isFading) return; // prevent double clicks while animating
+    if (isFading) return;
     setIsFading(true);
-
-    // Wait for fade-out to finish, then flip the role and fade back in
-    // (match this duration to the CSS -- here it's 200ms)
     setTimeout(() => {
       setToggled((prev) => !prev);
       setIsFading(false);
     }, 200);
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const username = e.target.username.value;
+    const password = e.target.password.value;
+    const role = toggled ? "Cashier" : "Admin";
+
+    fetch("http://localhost:8081/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password, role }),
+    })
+      .then(async (res) => {
+        const body = await res.json();
+        if (!res.ok) throw new Error(body.error || "Login failed");
+        return body;
+      })
+      .then((data) => {
+        localStorage.setItem("user", JSON.stringify(data.user));
+        if (data.user.role === "Admin") navigate("/dashboard");
+        else if (data.user.role === "Cashier") navigate("/cashier");
+      })
+      .catch((err) => {
+        alert(err.message || "Error logging in");
+      });
+  };
+
   const title = toggled ? "Cashier Login" : "Admin Login";
 
   return (
     <div className="admin-login-container">
-      {/* RIGHT SIDE – INTRO SECTION */}
       <div className="admin-intro-text">
         <div className="admin-text-content">
           <h1>Web-Based Inventory and Sales Tracking System</h1>
@@ -46,16 +64,14 @@ function Login({ onLogin }) {
         </div>
       </div>
 
-      {/* LEFT SIDE – LOGIN FORM */}
       <div className="admin-login-form">
         <div className="admin-form-content">
           <form onSubmit={handleSubmit}>
-            {/* controlled fade-out -> swap -> fade-in */}
             <h2 className={`fade-label ${isFading ? "fade-out" : ""}`}>
               {title}
             </h2>
 
-            <input type="email" name="email" placeholder="Email" required />
+            <input type="text" name="username" placeholder="Username" required />
             <input
               type="password"
               name="password"
@@ -66,10 +82,12 @@ function Login({ onLogin }) {
             <button type="submit">Login</button>
           </form>
 
-          {/* Toggle button stays with fade animation */}
           <p
-            className={`toggle-button fade-label ${isFading ? "fade-out" : ""}`}
+            className={`toggle-button fade-label ${
+              isFading ? "fade-out" : ""
+            }`}
             onClick={handleToggle}
+            style={{ cursor: "pointer" }}
           >
             {toggled ? "Admin Login" : "Cashier Login"}
           </p>

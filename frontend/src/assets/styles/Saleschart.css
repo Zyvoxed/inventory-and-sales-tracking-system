@@ -1,93 +1,101 @@
-/* Chart wrapper */
-.chart-box {
-  border-radius: 12px;
-  padding: 25px;
-  font-size: 15px;
-  color: #c62c2c;
-  padding-bottom: 65px;
+/* Overall container */
+.saleschart-container {
+  width: 100%;
+  padding-top: 5px;
 }
 
-/* Header (Sales by Category + This Year) */
-.chart-header {
+/* Top filter row */
+.chart-filters-row {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
+  gap: 12px;
+  margin-bottom: 15px;
 }
 
-.chart-header h3 {
-  margin: 0;
-  font-size: 18px;
-  color: #111827;
-  font-weight: 600;
-}
-
-.chart-year {
+.chart-select,
+.chart-date {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
   font-size: 14px;
-  color: #6b7280;
-  font-weight: 500;
+  background: white;
 }
 
-/* Chart + Right Side Layout */
-.chart-content {
+/* Main chart layout */
+.chart-main {
   display: flex;
   align-items: center;
-  gap: 25px;
+  gap: 40px;
 }
 
-/* Left Pie Chart */
-.chart-left {
+/* Pie Chart */
+.pie-wrapper {
   width: 45%;
+  min-width: 240px;
 }
 
-/* Right Profit + Category List */
-.chart-right {
+/* Right Side Legend */
+.legend-wrapper {
   width: 55%;
 }
 
-.profit-title {
-  color: #6b7280;
+/* Total Profit */
+.profit-label {
   font-size: 14px;
-  margin: 0;
+  color: #6b7280;
+  margin-bottom: 0;
 }
 
 .profit-value {
-  font-family: "Lato", sans-serif;
-  font-weight: 400;
-  font-style: normal;
   font-size: 32px;
-  font-weight: bold;
+  font-weight: 700;
+  color: #1f2937;
   margin-top: -5px;
   margin-bottom: 20px;
-  color: #111827;
 }
 
-/* Category List */
-.category-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+/* Scrollable category container */
+.category-scroll {
+  max-height: 150px;
+  overflow-y: auto;
+  padding-right: 8px;
 }
 
-.category-list li {
+/* Hide scrollbar (nice UI) */
+.category-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.category-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+/* Individual category line */
+.legend-item {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: left;
-  font-size: 11.5px;
-  margin-bottom: 15px;
-  color: #111827;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+/* Color box */
+.legend-color {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  margin-right: 10px;
+}
+
+/* Category name + color aligned */
+.legend-name {
+  flex: 1;
+  margin-left: 6px;
   font-weight: 500;
 }
 
-/* Small Color Boxes */
-.color-box {
-  width: 14px;
-  height: 14px;
-  display: inline-block;
-  margin-right: 10px;
-  border-radius: 3px;
-}
-
-.category-list li span.category-number {
-  color: #6b7280;
+/* Amount */
+.legend-amount {
   font-weight: 600;
+  color: #374151;
 }

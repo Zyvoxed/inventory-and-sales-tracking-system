@@ -1,4 +1,3 @@
-// src/Pages/Cashier.jsx
 import React from "react";
 import Sidebar from "../Components/Sidebar";
 import Dashboard from "../Pages/DashBoard";

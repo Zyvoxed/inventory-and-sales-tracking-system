@@ -1,57 +1,142 @@
+// src/Components/SalesChart.jsx
+import { useEffect, useState } from "react";
 import "../assets/styles/Saleschart.css";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Tooltip,
+} from "recharts";
 
-const data = [
-  { name: "Women's Clothing", value: 123 },
-  { name: "Accessories", value: 321 },
-  { name: "Men's Clothing", value: 456 },
-  { name: "Footwear", value: 678 },
-  { name: "Children's Clothing", value: 890 },
+const COLORS = [
+  "#0f172a", "#2563eb", "#3b82f6", "#06b6d4", "#10b981", "#84cc16",
+  "#facc15", "#f59e0b", "#ef4444", "#ec4899", "#a855f7", "#6366f1"
 ];
 
-const COLORS = ["#0f172a", "#1e293b", "#2563eb", "#3b82f6", "#60a5fa"];
-
 export default function SalesChart() {
-  const totalProfit = "1,234,567";
+  const [chartData, setChartData] = useState([]);
+  const [totalProfit, setTotalProfit] = useState(0);
+  const [filterMonth, setFilterMonth] = useState("all");
+  const [filterDate, setFilterDate] = useState("");
+
+  useEffect(() => {
+    loadChartData();
+  }, [filterMonth, filterDate]);
+
+  const loadChartData = async () => {
+    try {
+      const res = await fetch("http://localhost:8081/sales");
+      const sales = await res.json();
+
+      let filtered = sales;
+
+      if (filterMonth !== "all") {
+        filtered = filtered.filter((s) => s.sale_date.startsWith(filterMonth));
+      }
+
+      if (filterDate) {
+        filtered = filtered.filter(
+          (s) => s.sale_date.split(" ")[0] === filterDate
+        );
+      }
+
+      let categories = {};
+      let total = 0;
+
+      filtered.forEach((item) => {
+        total += item.subtotal;
+
+        if (!categories[item.category]) categories[item.category] = 0;
+        categories[item.category] += item.subtotal;
+      });
+
+      setTotalProfit(total);
+
+      const formatted = Object.entries(categories).map(([name, value]) => ({
+        name,
+        value,
+      }));
+
+      setChartData(formatted);
+    } catch (err) {
+      console.log("Chart Load Error:", err);
+    }
+  };
 
   return (
-    <div>
-      <div className="chart-content">
-        {/* Pie Chart */}
-        <ResponsiveContainer width="100%" height={220}>
-          <PieChart>
-            <Pie
-              data={data}
-              dataKey="value"
-              innerRadius={60}
-              outerRadius={80}
-              paddingAngle={2}
-            >
-              {data.map((entry, index) => (
-                <Cell key={index} fill={COLORS[index]} />
-              ))}
-            </Pie>
-            <Tooltip />
-          </PieChart>
-        </ResponsiveContainer>
+    <div className="saleschart-container">
 
-        {/* Legend & Profit */}
-        <div className="chart-right">
-          <p className="profit-title">Total Profit</p>
-          <h1 className="profit-value">{totalProfit}</h1>
+      {/* FILTERS ROW */}
+      <div className="chart-filters-row">
+        <select
+          value={filterMonth}
+          onChange={(e) => setFilterMonth(e.target.value)}
+          className="chart-select"
+        >
+          <option value="all">All Months</option>
+          <option value="2025-01">January</option>
+          <option value="2025-02">February</option>
+          <option value="2025-03">March</option>
+          <option value="2025-04">April</option>
+        </select>
 
-          <ul className="category-list">
-            {data.map((item, index) => (
-              <li key={index}>
+        <input
+          type="date"
+          className="chart-date"
+          value={filterDate}
+          onChange={(e) => setFilterDate(e.target.value)}
+        />
+      </div>
+
+      {/* CHART + LEGEND */}
+      <div className="chart-main">
+        {/* LEFT PIE CHART */}
+        <div className="pie-wrapper">
+          <ResponsiveContainer width="100%" height={240}>
+            <PieChart>
+              <Pie
+                data={chartData}
+                dataKey="value"
+                innerRadius={65}
+                outerRadius={90}
+                paddingAngle={3}
+              >
+                {chartData.map((_, index) => (
+                  <Cell
+                    key={index}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* RIGHT LEGEND & TOTAL PROFIT */}
+        <div className="legend-wrapper">
+          <p className="profit-label">Total Profit</p>
+          <h1 className="profit-value">₱{totalProfit.toLocaleString()}</h1>
+
+          {/* SCROLLABLE LEGEND */}
+          <div className="category-scroll">
+            {chartData.map((item, index) => (
+              <div key={index} className="legend-item">
                 <span
-                  className="color-box"
-                  style={{ backgroundColor: COLORS[index] }}
+                  className="legend-color"
+                  style={{ backgroundColor: COLORS[index % COLORS.length] }}
                 ></span>
-                {item.name}
-                <span className="category-number">{item.value}</span>
-              </li>
+
+                <span className="legend-name">{item.name}</span>
+
+                <span className="legend-amount">
+                  ₱{item.value.toLocaleString()}
+                </span>
+              </div>
             ))}
-          </ul>
+          </div>
+
         </div>
       </div>
     </div>

@@ -6,6 +6,7 @@ import {
   FaChartBar,
   FaCog,
   FaSignOutAlt,
+  FaFileAlt, // <-- added report icon
 } from "react-icons/fa";
 import "../assets/styles/Sidebar.css";
 
@@ -48,7 +49,7 @@ export default function Sidebar() {
         </NavLink>
 
         {/* SETTINGS SECTION */}
-        <h2 className="sidebar-section">ACCOUNT SETTINGS</h2>
+        <h2 className="sidebar-section">SETTINGS</h2>
         <NavLink
           to="/settings"
           className={({ isActive }) =>
@@ -57,6 +58,17 @@ export default function Sidebar() {
         >
           <FaCog />
           <span>Accounts</span>
+        </NavLink>
+
+        {/* INCIDENT REPORT */}
+        <NavLink
+          to="/incident-report"
+          className={({ isActive }) =>
+            `sidebar-link ${isActive ? "active" : ""}`
+          }
+        >
+          <FaFileAlt /> {/* Report Icon */}
+          <span>Incident Report</span>
         </NavLink>
       </nav>
 

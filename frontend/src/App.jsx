@@ -14,6 +14,7 @@ import Sales from "./Pages/Sales";
 import Accounts from "./Pages/Accounts";
 import Login from "./Pages/Login";
 import Cashier from "./Pages/Cashier";
+import IncidentReport from "./Pages/IncidentReport";
 
 import { ThemeProvider } from "./Context/ThemeContext";
 import "./assets/styles/App.css";
@@ -22,27 +23,23 @@ function AppLayout() {
   const location = useLocation();
   const user = JSON.parse(localStorage.getItem("user") || "null");
 
-  // we want to hide Sidebar/Topbar for login page
   const publicRoutes = ["/admin-login", "/"];
   const hideLayout = publicRoutes.includes(location.pathname.toLowerCase());
 
   return (
     <div className="app-layout">
-      {/* Show SAME SIDEBAR for both Admin and Cashier */}
       {!hideLayout && user && <Sidebar />}
 
       <div className="app-content">
-        {/* Topbar */}
         {!hideLayout && user && <Topbar />}
 
         <Routes>
-          {/* Default route */}
           <Route path="/" element={<Navigate to="/admin-login" />} />
 
           {/* Login */}
           <Route path="/admin-login" element={<Login />} />
 
-          {/* ----- ALLOW BOTH ADMIN & CASHIER TO ACCESS THESE ROUTES ----- */}
+          {/* Shared routes (Admin & Cashier) */}
           <Route
             path="/dashboard"
             element={user ? <Dashboard /> : <Navigate to="/admin-login" />}
@@ -63,7 +60,13 @@ function AppLayout() {
             element={user ? <Accounts /> : <Navigate to="/admin-login" />}
           />
 
-          {/* Cashier POS page */}
+          {/* INCIDENT REPORT (NEW) */}
+          <Route
+            path="/incident-report"
+            element={user ? <IncidentReport /> : <Navigate to="/admin-login" />}
+          />
+
+          {/* Cashier */}
           <Route
             path="/cashier"
             element={user ? <Cashier /> : <Navigate to="/admin-login" />}

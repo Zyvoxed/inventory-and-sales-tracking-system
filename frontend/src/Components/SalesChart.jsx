@@ -1,17 +1,21 @@
 // src/Components/SalesChart.jsx
 import { useEffect, useState } from "react";
 import "../assets/styles/Saleschart.css";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  ResponsiveContainer,
-  Tooltip,
-} from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 
 const COLORS = [
-  "#0f172a", "#2563eb", "#3b82f6", "#06b6d4", "#10b981", "#84cc16",
-  "#facc15", "#f59e0b", "#ef4444", "#ec4899", "#a855f7", "#6366f1"
+  "#0f172a",
+  "#2563eb",
+  "#3b82f6",
+  "#06b6d4",
+  "#10b981",
+  "#84cc16",
+  "#facc15",
+  "#f59e0b",
+  "#ef4444",
+  "#ec4899",
+  "#a855f7",
+  "#6366f1",
 ];
 
 export default function SalesChart() {
@@ -66,7 +70,6 @@ export default function SalesChart() {
 
   return (
     <div className="saleschart-container">
-
       {/* FILTERS ROW */}
       <div className="chart-filters-row">
         <select
@@ -93,20 +96,17 @@ export default function SalesChart() {
       <div className="chart-main">
         {/* LEFT PIE CHART */}
         <div className="pie-wrapper">
-          <ResponsiveContainer width="100%" height={240}>
+          <ResponsiveContainer width="100%" height={290}>
             <PieChart>
               <Pie
                 data={chartData}
                 dataKey="value"
-                innerRadius={65}
-                outerRadius={90}
+                innerRadius={67}
+                outerRadius={85}
                 paddingAngle={3}
               >
                 {chartData.map((_, index) => (
-                  <Cell
-                    key={index}
-                    fill={COLORS[index % COLORS.length]}
-                  />
+                  <Cell key={index} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
               <Tooltip />
@@ -136,7 +136,6 @@ export default function SalesChart() {
               </div>
             ))}
           </div>
-
         </div>
       </div>
     </div>

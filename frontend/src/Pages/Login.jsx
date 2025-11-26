@@ -55,11 +55,13 @@ function Login() {
             This system provides role-based access, product management, stock
             updates, and reports to improve business efficiency.
           </p>
-          <img
-            src="src/assets/images/box.png"
-            alt="Box Icon"
-            className="admin-box-icon"
-          />
+          <div className="box-wrapper">
+            <img
+              src="src/assets/images/box.png"
+              alt="Box Icon"
+              className="admin-box-icon"
+            />
+          </div>
         </div>
       </div>
 
@@ -70,7 +72,12 @@ function Login() {
               {title}
             </h2>
 
-            <input type="text" name="username" placeholder="Username" required />
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              required
+            />
             <input
               type="password"
               name="password"
@@ -82,9 +89,7 @@ function Login() {
           </form>
 
           <p
-            className={`toggle-button fade-label ${
-              isFading ? "fade-out" : ""
-            }`}
+            className={`toggle-button fade-label ${isFading ? "fade-out" : ""}`}
             onClick={handleToggle}
             style={{ cursor: "pointer" }}
           >

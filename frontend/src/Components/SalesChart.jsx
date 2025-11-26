@@ -82,6 +82,14 @@ export default function SalesChart() {
           <option value="2025-02">February</option>
           <option value="2025-03">March</option>
           <option value="2025-04">April</option>
+          <option value="2025-05">May</option>
+          <option value="2025-06">June</option>
+          <option value="2025-07">July</option>
+          <option value="2025-08">August</option>
+          <option value="2025-09">September</option>
+          <option value="2025-10">October</option>
+          <option value="2025-11">November</option>
+          <option value="2025-12">December</option>
         </select>
 
         <input

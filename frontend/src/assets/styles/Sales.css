@@ -1,34 +1,13 @@
-/* ===== PAGE ===== */
-.sales-page {
-  padding: 2rem;
-  background-color: #f8fafc;
-  color: #1e293b;
-  min-height: 100vh;
-  font-family: Arial, sans-serif;
-}
-
-.sales-page h1 {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  color: #1e293b;
-}
-
 /* ===== USER SELECT FORM ===== */
 .sales-form {
   background: #fff;
   border-radius: 10px;
-  padding: 1rem 1.5rem;
+  padding: 1rem 1rem;
   margin-bottom: 1.5rem;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 100rem;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.527);
-}
-
-.sales-form label {
-  font-weight: 600;
-  color: #334155;
 }
 
 .sales-form select {
@@ -46,30 +25,62 @@
 }
 
 /* ===== TABLE ===== */
+/* TABLE CONTAINER */
 .sales-table-container {
-  background: #fff;
-  border-radius: 10px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.527);
-  overflow-x: auto;
+  width: 96.5%;
+  max-height: 540px;
+  overflow-y: auto; /* scrollable */
 }
 
+/* TABLE */
 .sales-table {
   width: 100%;
   border-collapse: collapse;
-}
-
-.sales-table th,
-.sales-table td {
-  padding: 14px 20px;
-  text-align: left;
+  font-size: 0.9rem;
 }
 
 .sales-table th {
-  background-color: #f1f5f9;
-  color: #475569;
+  background-color: #f5f6f7;
+  text-align: center;
+  padding: 20px;
   font-weight: 600;
-  text-transform: uppercase;
-  font-size: 0.9rem;
+  color: #555;
+  border-bottom: 1px solid #eee;
+}
+
+.sales-table td {
+  text-align: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.sales-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* SCROLLBAR */
+.sales-table-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sales-table-container::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 6px;
+}
+
+/* DELETE BUTTON */
+.sales-table button {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-size: 0.85rem;
+  background: #ec9494;
 }
 
 .sales-table tr:nth-child(even) {
@@ -80,25 +91,74 @@
   background-color: #e2e8f0;
 }
 
-/* ===== TOTAL SALES BOX ===== */
-.sales-total {
-  margin-top: 20px;
-  padding: 12px;
-  border-top: 2px solid #cbd5e1;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #f8fafc;
+.sort-container {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.sales-sort-btn {
+  height: 43px;
+  padding: 1px 8px;
+  background: #222b40;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  color: white;
+  font-family: "Lato", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.sales-sort-btn:hover {
+  background-color: #222b40;
+  color: white;
+}
+
+.sales-sort-dropdown {
+  position: absolute;
+  top: 50px;
+  right: 0px;
+  background: white;
   border-radius: 8px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+  width: 180px;
+  z-index: 10;
 }
 
-.sales-total h3 {
+.sales-sort-dropdown p {
   margin: 0;
-  font-weight: 600;
-  color: #334155;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
-.sales-total h2 {
-  margin: 0;
-  color: #2563eb;
+.sales-sort-dropdown p:hover {
+  background: #f1f1f1;
+}
+
+.save-btn {
+  height: 43px;
+  padding: 1px 8px;
+  background: #25a650;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  color: white;
+  font-family: "Lato", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.save-btn:hover {
+  background-color: #1e7f3e;
+  color: white;
+}
+
+.top-controls {
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 2rem;
 }

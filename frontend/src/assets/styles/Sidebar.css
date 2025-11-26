@@ -50,13 +50,13 @@
 }
 
 .sidebar-link:hover {
-  background-color: #96b5ff;
-  color: #000000;
+  background-color: #334f91;
+  color: white;
 }
 
 .sidebar-link.active {
   background-color: #334f91;
-  color: white;
+  color: rgb(255, 251, 251);
 }
 
 .sidebar-link svg {
@@ -65,8 +65,8 @@
   flex-shrink: 0;
 }
 
-.sidebar-link:hover svg {
-  color: #000000;
+.sidebar-link.active svg {
+  color: white;
 }
 
 .sidebar-footer {

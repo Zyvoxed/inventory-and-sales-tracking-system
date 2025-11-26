@@ -193,27 +193,74 @@ app.post("/sale", (req, res) => {
   if (!user_id || !items || items.length === 0)
     return res.status(400).json({ error: "Missing sale data" });
 
-  const totalAmount = items.reduce((sum, i) => sum + i.subtotal, 0);
+  // Basic server-side validation
+  for (const it of items) {
+    if (!it.product_id || !Number.isFinite(Number(it.quantity)) || Number(it.quantity) <= 0) {
+      return res.status(400).json({ error: "Invalid item data" });
+    }
+  }
 
-  const saleSql = `
-    INSERT INTO sale (user_id, total_amount, sale_date)
-    VALUES (?, ?, NOW())
-  `;
+  const totalAmount = items.reduce((sum, i) => sum + Number(i.subtotal || 0), 0);
 
-  db.query(saleSql, [user_id, totalAmount], (err, result) => {
-    if (err) return res.status(500).json({ error: err });
+  // Use a transaction to insert sale, sales_detail and decrement product stock
+  db.beginTransaction((tErr) => {
+    if (tErr) return res.status(500).json({ error: tErr });
 
-    const saleId = result.insertId;
-    const values = items.map((i) => [saleId, i.product_id, i.quantity, i.subtotal]);
+    const saleSql = `
+      INSERT INTO sale (user_id, total_amount, sale_date)
+      VALUES (?, ?, NOW())
+    `;
 
-    db.query(
-      "INSERT INTO sales_detail (sale_id, product_id, quantity, subtotal) VALUES ?",
-      [values],
-      (err2) => {
-        if (err2) return res.status(500).json({ error: err2 });
-        res.json({ success: "Sale recorded", sale_id: saleId });
+    db.query(saleSql, [user_id, totalAmount], (err, result) => {
+      if (err) {
+        return db.rollback(() => res.status(500).json({ error: err }));
       }
-    );
+
+      const saleId = result.insertId;
+      const values = items.map((i) => [saleId, i.product_id, i.quantity, i.subtotal]);
+
+      db.query(
+        "INSERT INTO sales_detail (sale_id, product_id, quantity, subtotal) VALUES ?",
+        [values],
+        (err2) => {
+          if (err2) return db.rollback(() => res.status(500).json({ error: err2 }));
+
+          // Sequentially decrement stock for each sold item and ensure stock is sufficient
+          const updateStockForItem = (index) => {
+            if (index >= items.length) {
+              // All updates succeeded, commit
+              return db.commit((cErr) => {
+                if (cErr) return db.rollback(() => res.status(500).json({ error: cErr }));
+                return res.json({ success: "Sale recorded", sale_id: saleId });
+              });
+            }
+
+            const it = items[index];
+            const updSql = `
+              UPDATE product
+              SET quantity_in_stock = quantity_in_stock - ?
+              WHERE product_id = ? AND quantity_in_stock >= ?
+            `;
+
+            db.query(updSql, [it.quantity, it.product_id, it.quantity], (err3, resultUpd) => {
+              if (err3) return db.rollback(() => res.status(500).json({ error: err3 }));
+
+              if (resultUpd.affectedRows === 0) {
+                // Insufficient stock for this product, rollback
+                return db.rollback(() =>
+                  res.status(400).json({ error: `Insufficient stock for product_id ${it.product_id}` })
+                );
+              }
+
+              // Proceed to next item
+              updateStockForItem(index + 1);
+            });
+          };
+
+          updateStockForItem(0);
+        }
+      );
+    });
   });
 });
 

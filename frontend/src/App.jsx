@@ -28,8 +28,10 @@ function AppLayout() {
 
   return (
     <div className="app-layout">
-      {/* Show SAME SIDEBAR for both Admin and Cashier */}
-      {!hideLayout && user && <Sidebar />}
+      {/* Show sidebar except when on public routes OR logged-in user is a Cashier */}
+      {!hideLayout && user && !(user.role && user.role.toLowerCase() === "cashier") && (
+        <Sidebar />
+      )}
 
       <div className="app-content">
         {/* Topbar */}

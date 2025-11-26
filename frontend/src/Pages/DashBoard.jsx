@@ -1,4 +1,3 @@
-// src/Pages/DashBoard.jsx
 import React, { useState, useEffect } from "react";
 import DashboardCards from "../Components/DashboardCards";
 import SalesChart from "../Components/SalesChart";
@@ -27,7 +26,8 @@ function DashBoard() {
 
   const filteredStock = apiData
     .filter((item) => {
-      if (filter === "Low Stock") return Number(item.Stock) > 0 && Number(item.Stock) < 20;
+      if (filter === "Low Stock")
+        return Number(item.Stock) > 0 && Number(item.Stock) < 20;
       if (filter === "Out of Stock") return Number(item.Stock) === 0;
       return true;
     })
@@ -50,12 +50,14 @@ function DashBoard() {
       <div className="main-grid">
         {/* LEFT — SALES CHART */}
         <div className="chart-box">
-          <h3>Sales by Category</h3>
-          <SalesChart />
+          <div className="stock-header">
+            <h3>Sales by Category</h3>
+            <SalesChart />
+          </div>
         </div>
 
         {/* RIGHT — STOCK LEVEL */}
-        <div className="chart-box stock-box">
+        <div className="chart-box">
           <div className="stock-header">
             <h3>Stock Level</h3>
 

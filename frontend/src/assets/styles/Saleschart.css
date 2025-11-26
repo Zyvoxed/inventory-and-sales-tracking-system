@@ -1,19 +1,21 @@
 /* Overall container */
 .saleschart-container {
-  width: 100%;
-  padding-top: 5px;
+  position: absolute;
+  left: 230px;
+  width: 300px;
+  padding-top: 60px;
 }
 
 /* Top filter row */
 .chart-filters-row {
   display: flex;
   gap: 12px;
-  margin-bottom: 15px;
+  margin-bottom: -20px;
 }
 
 .chart-select,
 .chart-date {
-  padding: 10px 12px;
+  padding: 5px 5px;
   border: 1px solid #d1d5db;
   border-radius: 8px;
   font-size: 14px;
@@ -30,7 +32,7 @@
 /* Pie Chart */
 .pie-wrapper {
   width: 45%;
-  min-width: 240px;
+  min-width: 200px;
 }
 
 /* Right Side Legend */
@@ -46,7 +48,7 @@
 }
 
 .profit-value {
-  font-size: 32px;
+  font-size: 25px;
   font-weight: 700;
   color: #1f2937;
   margin-top: -5px;

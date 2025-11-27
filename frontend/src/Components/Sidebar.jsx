@@ -72,18 +72,6 @@ export default function Sidebar() {
         </NavLink>
       </nav>
 
-      {/* LOGOUT AT THE BOTTOM */}
-      <div className="sidebar-footer">
-        <NavLink
-          to="/admin-login"
-          className={({ isActive }) =>
-            `sidebar-link ${isActive ? "active" : ""}`
-          }
-        >
-          <FaSignOutAlt />
-          <span>Logout</span>
-        </NavLink>
-      </div>
     </aside>
   );
 }

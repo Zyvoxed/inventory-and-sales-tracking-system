@@ -1,3 +1,6 @@
+/* ===========================
+   TOPBAR
+   =========================== */
 .topbar {
   position: fixed;
   top: 0;
@@ -7,52 +10,143 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: none;
   padding: 10px 20px;
-  box-sizing: border-box;
   background: #ededed;
+  box-sizing: border-box;
 }
 
+/* ===========================
+   COMPANY NAME
+   =========================== */
 .company-name {
   font-family: "Poppins", sans-serif;
   margin: 0;
   padding-left: 25px;
-  padding-bottom: 0;
   font-size: 25px;
   font-weight: bold;
 }
 
+/* ===========================
+   USER AREA (fixed & aligned)
+   =========================== */
 .user {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  /* spacing between avatar, info, and arrow */
   padding-right: 20px;
-  width: 220px; /* FIXED WIDTH */
-  justify-content: flex-end;
-  flex-shrink: 0; /* prevents shrinking */
+  flex-shrink: 0;
+  position: relative;
 }
 
+/* Avatar */
 .avatar {
   border-radius: 50%;
   width: 40px;
   height: 40px;
+  flex-shrink: 0;
+  /* prevents shrinking */
 }
 
+/* Wrapper for name + role */
 .info {
   display: flex;
   flex-direction: column;
-  max-width: 150px; /* prevents long text from expanding */
+  min-width: 90px;
+  /* ensures text doesn’t overlap arrow */
+  max-width: 150px;
   overflow: hidden;
   white-space: nowrap;
-  text-overflow: ellipsis; /* adds "..." if text too long */
+  text-overflow: ellipsis;
 }
 
+/* User name */
 .name {
   color: #1e1e2f;
   font-weight: 600;
 }
 
+/* User role */
 .role {
   font-size: 15px;
   color: gray;
+}
+
+/* Role + arrow clickable wrapper */
+.user-info-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+/* ===========================
+   ARROW CONTAINER
+   =========================== */
+.arrow-container {
+  flex-shrink: 0;
+  /* prevents overlap */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.arrow-container:hover {
+  background-color: #ebebeb;
+}
+
+/* Arrow icon */
+.user-arrow {
+  border: solid #222b40;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 3px;
+  transform: rotate(45deg);
+  transition: transform 0.25s ease;
+  cursor: pointer;
+}
+
+.user-arrow.open {
+  transform: rotate(-135deg);
+}
+
+/* ===========================
+   DROPDOWN MENU
+   =========================== */
+.user-dropdown {
+  position: absolute;
+  top: 60px;
+  /* sits properly below user section */
+  right: 0;
+  /* aligns directly under arrow */
+  width: 150px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 2000;
+}
+
+.user-dropdown ul {
+  margin: 0;
+  padding: 8px 0;
+  list-style: none;
+}
+
+.user-dropdown li {
+  padding: 10px 15px;
+  font-size: 15px;
+  cursor: pointer;
+  color: #1e1e2f;
+  transition: background 0.2s ease;
+}
+
+.user-dropdown li:hover {
+  background: #f5f5f5;
 }

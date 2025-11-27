@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../Components/Sidebar";
 import axios from "axios";
-import "../assets/styles/Accounts.css"; // reuse accounts style (provided)
+import "../assets/styles/IncidentReport.css"; // use the new CSS file
 
 export default function IncidentReport() {
   const user = JSON.parse(localStorage.getItem("user") || "null");
@@ -21,7 +21,6 @@ export default function IncidentReport() {
     setError(null);
     try {
       const res = await axios.get("http://localhost:8081/incident-report");
-      // Expecting an array of reports from backend
       setReports(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error("Failed to load incident reports:", err);
@@ -35,22 +34,20 @@ export default function IncidentReport() {
     if (!window.confirm("Mark this incident as Resolved?")) return;
     setResolvingId(incident_id);
     try {
-      // Send a PUT to update status — backend should accept this
-      console.log(`Updating incident ${incident_id} to Resolved`);
       await axios.put(`http://localhost:8081/incident-report/${incident_id}`, {
         status: "Resolved",
       });
-      console.log(`Successfully updated incident ${incident_id}`);
-      // Optimistically update UI
+
       setReports((prev) =>
         prev.map((r) =>
-          r.incident_id === incident_id ? { ...r, status: "Resolved" } : r
+          r.incident_id === incident_id
+            ? { ...r, status: "Resolved" }
+            : r
         )
       );
     } catch (err) {
-      console.error("Failed to mark resolved:", err.response?.data || err.message);
+      console.error("Failed to update incident:", err.response?.data || err.message);
       alert("Could not update incident status.");
-      // Reload reports to revert UI to correct state
       await loadReports();
     } finally {
       setResolvingId(null);
@@ -59,67 +56,73 @@ export default function IncidentReport() {
 
   return (
     <div className="dashboard">
-      {/* SIDEBAR */}
       <Sidebar />
-      {/* MAIN CONTENT */}
-      <div style={{ marginLeft: 16, marginTop: 8 }}>
+
+      <div className="incident-container">
         <h1 className="page-title">Incident Report</h1>
 
-        {loading ? (
-          <p>Loading incident reports...</p>
-        ) : error ? (
-          <p style={{ color: "red" }}>{error}</p>
-        ) : reports.length === 0 ? (
-          <p>No incident reports found.</p>
-        ) : (
-          <div className="product-table" style={{ maxWidth: "1000px" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        {loading && <p className="incident-loading">Loading incident reports...</p>}
+
+        {error && <p className="incident-error">{error}</p>}
+
+        {!loading && !error && reports.length === 0 && (
+          <p className="incident-empty">No incident reports found.</p>
+        )}
+
+        {!loading && !error && reports.length > 0 && (
+          <div className="product-table incident-table-wrapper">
+            <table className="incident-table">
               <thead>
                 <tr>
-                  <th style={{ textAlign: "left", padding: "12px" }}>ID</th>
-                  <th style={{ textAlign: "left", padding: "12px" }}>Description</th>
-                  <th style={{ textAlign: "left", padding: "12px" }}>Reported By</th>
-                  <th style={{ textAlign: "left", padding: "12px" }}>Created At</th>
-                  <th style={{ textAlign: "left", padding: "12px" }}>Status</th>
-                  <th style={{ textAlign: "center", padding: "12px" }}>Action</th>
+                  <th>ID</th>
+                  <th>Description</th>
+                  <th>Reported By</th>
+                  <th>Created At</th>
+                  <th>Status</th>
+                  <th className="incident-action">Action</th>
                 </tr>
               </thead>
+
               <tbody>
                 {reports.map((r) => (
-                  <tr key={r.incident_id} style={{ borderBottom: "1px solid #eee" }}>
-                    <td style={{ padding: "12px", verticalAlign: "top" }}>{r.incident_id}</td>
-                    <td style={{ padding: "12px", verticalAlign: "top", maxWidth: 420, whiteSpace: "pre-wrap" }}>
+                  <tr key={r.incident_id}>
+                    <td>{r.incident_id}</td>
+
+                    <td className="incident-description">
                       {r.description || "-"}
                     </td>
-                    <td style={{ padding: "12px", verticalAlign: "top" }}>
-                      {/* If backend returns reportedby name, show it; otherwise show id */}
-                      {r.reportedby_name || r.reportedby_id || "-"}
+
+                    <td>{r.reportedby_name || r.reportedby_id || "-"}</td>
+
+                    <td>
+                      {r.created_at
+                        ? new Date(r.created_at).toLocaleString()
+                        : "-"}
                     </td>
-                    <td style={{ padding: "12px", verticalAlign: "top" }}>
-                      {r.created_at ? new Date(r.created_at).toLocaleString() : "-"}
-                    </td>
-                    <td style={{ padding: "12px", verticalAlign: "top" }}>
+
+                    <td>
                       {r.status === "Resolved" ? (
-                        <span style={{ color: "#059669", fontWeight: 700 }}>Resolved</span>
+                        <span className="status-resolved">Resolved</span>
                       ) : (
-                        <span style={{ color: "#d97706", fontWeight: 700 }}>Pending</span>
+                        <span className="status-pending">Pending</span>
                       )}
                     </td>
-                    <td style={{ padding: "12px", verticalAlign: "top", textAlign: "center" }}>
+
+                    <td className="incident-action">
                       {r.status !== "Resolved" ? (
                         <button
-                          className="add-btn"
+                          className="add-btn incident-btn-resolve"
                           onClick={() => markResolved(r.incident_id)}
                           disabled={resolvingId === r.incident_id}
-                          style={{ padding: "8px 12px", background: "#10b981" }}
                         >
-                          {resolvingId === r.incident_id ? "Resolving..." : "Mark Resolved"}
+                          {resolvingId === r.incident_id
+                            ? "Resolving..."
+                            : "Mark Resolved"}
                         </button>
                       ) : (
                         <button
-                          className="cancel-btn"
+                          className="incident-btn-resolved"
                           onClick={() => alert("Incident already resolved")}
-                          style={{ padding: "8px 12px", background: "#9ca3af" }}
                         >
                           Resolved
                         </button>
@@ -129,11 +132,6 @@ export default function IncidentReport() {
                 ))}
               </tbody>
             </table>
-            <div style={{ marginTop: 12 }}>
-              <button className="category-manage-btn" onClick={loadReports}>
-                Refresh
-              </button>
-            </div>
           </div>
         )}
       </div>

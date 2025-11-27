@@ -57,8 +57,8 @@ function DashBoard() {
         </div>
 
         {/* RIGHT — STOCK LEVEL */}
-        <div className="chart-box">
-          <div className="stock-header">
+        <div className="stock-box">
+          <div className="sales-header">
             <h3>Stock Level</h3>
 
             <div className="dropdown">
@@ -129,27 +129,61 @@ function DashBoard() {
         </div>
       </div>
 
-      {/* LOW STOCK ALERTS */}
+      {/* LOW STOCK & OUT OF STOCK ALERTS */}
       <div className="restock-box">
-        <h3>Low Stock Alerts</h3>
 
-        <div className="restock-list">
-          {lowStockItems.length === 0 ? (
-            <p>All products are sufficiently stocked</p>
-          ) : (
-            lowStockItems.map((item) => (
-              <div key={item.ID} className="restock-item">
-                <span className="restock-name">{item.Name}</span>
-                <span className="restock-warning">
-                  {item.Stock < 10
-                    ? `Critical: ${item.Stock} units`
-                    : `Low: ${item.Stock} units`}
-                </span>
-              </div>
-            ))
-          )}
+        <div className="restock-sections">
+
+          {/* LEFT — LOW STOCK */}
+          <div className="low-stock-section">
+            <h3>Low Stock Alerts</h3>
+
+            <div className="restock-list">
+              {lowStockItems.length === 0 ? (
+                <p>No low stock items</p>
+              ) : (
+                lowStockItems.map((item) => (
+                  <div key={item.ID} className="restock-item">
+                    <span className="restock-name">{item.Name}</span>
+                    <span className="restock-warning">
+                      {item.Stock < 10
+                        ? `Critical: ${item.Stock} units`
+                        : `Low: ${item.Stock} units`}
+                    </span>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+
+          {/* DIVIDER */}
+          <div className="vertical-divider"></div>
+
+          {/* RIGHT — OUT OF STOCK */}
+          <div className="out-stock-section">
+            <h3>Out of Stock</h3>
+
+            <div className="restock-list">
+              {apiData.filter((item) => Number(item.Stock) === 0).length === 0 ? (
+                <p>No out of stock items</p>
+              ) : (
+                apiData
+                  .filter((item) => Number(item.Stock) === 0)
+                  .map((item) => (
+                    <div key={item.ID} className="restock-item">
+                      <span className="restock-name">{item.Name}</span>
+                      <span className="restock-warning" style={{ color: "#d9534f" }}>
+                        Out of Stock
+                      </span>
+                    </div>
+                  ))
+              )}
+            </div>
+          </div>
+
         </div>
       </div>
+
     </div>
   );
 }

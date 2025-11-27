@@ -71,12 +71,13 @@
 }
 .main-grid {
   margin-bottom: 20px;
-  margin-right: 320px;
+  margin-right: 220px;
   display: grid;
   grid-template-columns: 2fr 2fr;
   gap: 20px;
   margin-top: -400px;
 }
+
 .chart-box {
   background: #fff;
   border-radius: 12px;
@@ -85,6 +86,18 @@
   color: #333;
   padding: 15px 18px;
   height: 370px;
+  display: flex;
+  flex-direction: column;
+}
+.stock-box{
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.527);
+  font-size: 15px;
+  color: #333;
+  padding: 15px 18px;
+  height: 370px;
+  width: 300px;
   display: flex;
   flex-direction: column;
 }
@@ -107,22 +120,63 @@
   font-size: 15px;
   color: #333;
 }
-.restock-box h3 {
-  margin-bottom: 40px;
-  margin-top: -10px;
-  font-size: 20px;
-  color: #111827;
-}
+
 .restock-box p {
   font-size: 15px;
   font-weight: 700;
   color: #6b7280;
 }
+/* MAIN WRAPPER OF THE TWO COLUMNS */
+.restock-sections {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  height: 180px;
+  margin-top: 20px;
+}
+
+/* LOW + OUT SECTION */
+.low-stock-section,
+.out-stock-section {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* TITLES */
+.low-stock-section h3,
+.out-stock-section h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #222b40;
+  margin-bottom: 10px;
+}
+
+/* VERTICAL LINE */
+.vertical-divider {
+  width: 2px;
+  background: #e3e3e3;
+  border-radius: 10px;
+}
+
+/* LIST INSIDE EACH SECTION */
 .restock-list {
-  margin-top: 15px;
+  margin-top: 5px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  max-height: 130px;
+  overflow-y: auto;
+}
+
+/* SCROLLBAR STYLING */
+.restock-list::-webkit-scrollbar {
+  width: 3px;
+}
+
+.restock-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 6px;
 }
 
 .restock-item {
@@ -143,9 +197,17 @@
 }
 
 .stock-header {
+  padding-top: 25px;
   display: flex;
   justify-content: space-between;
   align-items: grid;
+}
+
+.sales-header{
+  padding: 0px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .dropdown {
@@ -206,7 +268,6 @@
   background: #f5f5f5;
 }
 
-/* STOCK LEVEL BOX — COMPACT VERSION */
 /* STOCK LEVEL BOX — SCROLLABLE VERSION */
 .stock-list {
   flex: 1; /* fill remaining space */

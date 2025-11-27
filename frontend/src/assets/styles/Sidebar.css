@@ -21,8 +21,8 @@
   color: #9ca3af;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin-top: 1.2rem;
-  margin-bottom: 0.3rem;
+  margin-top: 2rem;
+  margin-bottom: 0.2rem;
   padding-left: 0.5rem;
 }
 
@@ -69,11 +69,6 @@
   color: white;
 }
 
-.sidebar-footer {
-  padding: 1rem;
-  margin-top: 6.5rem;
-  border-top: 1px solid #334155;
-}
 
 @media (max-width: 768px) {
   .sidebar {

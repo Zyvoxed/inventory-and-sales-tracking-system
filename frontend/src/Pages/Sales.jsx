@@ -22,7 +22,7 @@ export default function Sales() {
   const deleteSale = (saleId) => {
     if (!window.confirm("Delete this sale and all its items?")) return;
     axios
-      .delete(`http://localhost:8081/sale/${saleId}`)
+      .delete(`http://localhost:8081/sales/${saleId}`)
       .then(() => {
         alert("Sale deleted!");
         loadSales();

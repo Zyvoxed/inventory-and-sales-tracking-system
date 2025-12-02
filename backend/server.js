@@ -9,8 +9,7 @@ const productRoutes = require("./routes/product");
 const salesRoutes = require("./routes/sales");
 const salesAggregateRoutes = require("./routes/salesAggregate");
 const incidentReportRoutes = require("./routes/incidentReport");
-const logsRoute = require("./routes/accountslogs");
-
+const pendingSalesRoutes = require("./routes/pendingSales");
 const createDefaultAdmin = require("./utils/initAdmin");
 
 const app = express();
@@ -27,7 +26,7 @@ app.use("/product", productRoutes);
 app.use("/sales", salesRoutes);
 app.use("/sales-aggregate", salesAggregateRoutes);
 app.use("/incident-report", incidentReportRoutes);
-app.use("/audit", logsRoute);
+app.use("/pending-sales", pendingSalesRoutes);
 
 // Health Check Route
 app.get("/", (req, res) => {
@@ -37,23 +36,14 @@ app.get("/", (req, res) => {
 // Connect DB and initialize default admin
 db.connect((err) => {
   if (err) {
-    console.error("❌ MySQL connection error:", err);
-    return;
+    console.error("MySQL connection error:", err);
+  } else {
+    console.log("Connected to MySQL");
+    createDefaultAdmin();
   }
-
-  console.log("✅ Connected to MySQL database");
-  createDefaultAdmin();
-
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
-  });
 });
 
-// Graceful error handling (prevents server crash)
-process.on("uncaughtException", (err) => {
-  console.error("UNCAUGHT EXCEPTION!", err);
-});
+const PORT = 8081;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
-process.on("unhandledRejection", (reason) => {
-  console.error("UNHANDLED REJECTION!", reason);
-});
+// End of server.js

@@ -74,21 +74,20 @@ export default function Cashier() {
       })),
     };
 
+    // Send pending sale to backend (do not decrement stock yet)
     axios
-      .post("http://localhost:8081/sales", saleData)
+      .post("http://localhost:8081/pending-sales", saleData)
       .then(() => {
         alert(
-          `Sale completed\nTotal: ₱${total.toFixed(
-            2
-          )}\nChange: ₱${change.toFixed(2)}`
+          `Transaction saved to pending sales.\nTotal: ₱${total.toFixed(2)}\nChange: ₱${change.toFixed(2)}`
         );
+        // Reset cart and payment but DO NOT refresh product stock yet
         setCart([]);
         setMoneyReceived(0);
-        loadProducts();
       })
       .catch((err) => {
-        console.error(err);
-        alert("Error completing sale");
+        console.error("Pending sale error:", err);
+        alert("Error saving transaction");
       });
   };
 

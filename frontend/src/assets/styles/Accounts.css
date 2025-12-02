@@ -15,14 +15,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  font-size: 17px;
 }
 
 /* ACCOUNT NAME TAG */
 .account-name {
-  padding: 6px 12px;
+  padding: 3px 12px;
   border-radius: 8px;
   border: 1px solid #bdbdbd;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 500;
   background: #f8f8f8;
 }
@@ -65,13 +66,13 @@
   cursor: pointer;
   font-size: 14px;
   margin-top: 6px;
-  font-family: "IBM Plex Sans Hebrew", sans-serif;
-    font-weight: 400;
-    font-style: normal;
 }
 
 /* EXPAND BUTTON */
 .expand-btn {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-style: normal;
   width: 100%;
   padding: 6px 10px;
   font-size: 16px;
@@ -83,10 +84,13 @@
 }
 
 /* NOTES AREA / EXPAND AREA */
-.notes-area,
-.adaptive-box,
-.account-expand {
+.adaptive-box {
   width: 100%;
+}
+
+.notes-area,
+.account-expand {
+  width: 98%;
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #bdbdbd;
@@ -195,4 +199,92 @@
 /* HOVER EFFECT */
 .account-bin-item:hover {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+/* ================================
+   MODERN AUDIT LOG STYLING
+================================ */
+
+/* Audit Log Container */
+.audit-log-box {
+  width: 1060px;
+  margin-top: 12px;
+  padding: 16px;
+  border-radius: 12px;
+  background: #e5e5e6;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  font-size: 200px;
+  color: #1f2937;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  cursor: pointer;
+}
+
+/* Audit Log Header */
+.audit-log-box h3 {
+  font-family: "Hammersmith One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  margin: 0 0 12px 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+  border-bottom: 1px solid #979797;
+  padding-bottom: 6px;
+}
+
+/* Individual Audit Items */
+.audit-item {
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover Effect for Items */
+.audit-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Audit Labels */
+.audit-item p {
+  font-family: "Lato", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 15px;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.audit-item strong {
+  font-family: "Hammersmith One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  color: #111827;
+}
+
+/* Divider */
+.audit-item hr {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 8px 0 0 0;
+}
+
+/* Responsive for smaller screens */
+@media (max-width: 768px) {
+  .audit-log-box {
+    padding: 12px;
+  }
+
+  .audit-item {
+    padding: 10px 12px;
+  }
 }

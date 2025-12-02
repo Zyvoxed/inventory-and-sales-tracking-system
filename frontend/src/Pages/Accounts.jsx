@@ -338,17 +338,6 @@
                       Retrieve
                     </button>
 
-                    {/* If you ever want permanent delete, wire this to your DELETE endpoint.
-                        For safety we do not include it by default. */}
-                    {/* <button
-                      className="delete-btn"
-                      onClick={() => {
-                        if (!window.confirm(`Permanently delete ${b.fullname}?`)) return;
-                        permanentlyDelete(b);
-                      }}
-                    >
-                      Delete Permanently
-                    </button> */}
                   </div>
                 </div>
               ))}

@@ -1,10 +1,11 @@
 const express = require("express");
 const db = require("../config/db");
+const logAction = require("../utils/logger");
 
 const router = express.Router();
 
 router.get("/", (req, res) => {
-  const { date, month } = req.query;
+  const { date, month, user_id } = req.query; // optionally pass user_id for logging
   let whereClause = "";
   const params = [];
 
@@ -23,7 +24,7 @@ router.get("/", (req, res) => {
       SUM(sd.quantity) AS total_qty
     FROM sales_detail sd
     JOIN sale s ON s.sale_id = sd.sale_id
-    JOIN product p ON p.product_id = sd.product_id
+    JOIN product p ON sd.product_id = p.product_id
     ${whereClause}
     GROUP BY p.category
   `;
@@ -37,8 +38,16 @@ router.get("/", (req, res) => {
 
   db.query(categorySql, params, (err, categories) => {
     if (err) return res.status(500).json({ error: err });
+
     db.query(profitSql, params, (err2, profit) => {
       if (err2) return res.status(500).json({ error: err2 });
+
+      logAction(
+        user_id || null,
+        "Viewed sales report",
+        `Filters - Date: ${date || "N/A"}, Month: ${month || "N/A"}`
+      );
+
       res.json({
         byCategory: categories || [],
         total_profit: profit[0]?.total_profit || 0,

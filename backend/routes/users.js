@@ -1,6 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const db = require("../config/db");
+const logAction = require("../utils/logger");
 
 const router = express.Router();
 const SALT_ROUNDS = 10;
@@ -23,7 +24,7 @@ router.get("/", (req, res) => {
 // Create user
 router.post("/", (req, res) => {
   (async () => {
-    const { username, password, fullname, role } = req.body;
+    const { username, password, fullname, role, userId } = req.body;
     if (!username || !password || !fullname || !role)
       return res.status(400).json({ error: "Missing fields" });
 
@@ -33,16 +34,21 @@ router.post("/", (req, res) => {
     `;
     try {
       const hash = await bcrypt.hash(password, SALT_ROUNDS);
-      db.query(sql, [username, hash, fullname, role], (err) => {
+      db.query(sql, [username, hash, fullname, role], (err, result) => {
         if (err && err.code === "ER_DUP_ENTRY")
           return res.status(409).json({ error: "Username already exists" });
         if (err)
           return res
             .status(500)
             .json({ error: "Failed to create user", details: err.message });
-        return res
-          .status(201)
-          .json({ success: "Account created successfully" });
+
+        // Log creation with current user ID
+        logAction(userId || null, `Created user ${username}`, `Role: ${role}`);
+
+        return res.status(201).json({
+          success: "Account created successfully",
+          userId: result.insertId,
+        });
       });
     } catch (e) {
       return res.status(500).json({ error: "Server error" });
@@ -55,6 +61,9 @@ router.delete("/:id", (req, res) => {
   const { id } = req.params;
   db.query("DELETE FROM users WHERE user_id=?", [id], (err) => {
     if (err) return res.status(500).json({ error: err });
+
+    // Optionally log deletion with NULL user if no auth context
+    logAction(null, `Deleted user ID ${id}`);
     res.json({ success: "User deleted successfully" });
   });
 });

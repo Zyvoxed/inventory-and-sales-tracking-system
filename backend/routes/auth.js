@@ -1,6 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const db = require("../config/db");
+const logAction = require("../utils/logger");
 
 const router = express.Router();
 const SALT_ROUNDS = 10;
@@ -32,6 +33,10 @@ router.post("/login", (req, res) => {
           .json({ error: "Invalid credentials or wrong login page" });
 
       const { password: _p, ...user } = userRow;
+
+      // Log successful login
+      logAction(user.user_id, "Login successful", `Role: ${user.role}`);
+
       res.json({ success: true, user });
     });
   });

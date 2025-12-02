@@ -1,3 +1,4 @@
+// src/Pages/DashboardCards.jsx
 import React from "react";
 import "../assets/styles/Dashboard.css";
 
@@ -10,11 +11,12 @@ export default function DashboardCards({ apiData = [] }) {
   const totalItems = apiData.length;
 
   // Total Stock = sum of all item.Stock values
-  const totalStock = apiData.reduce((total, item) => {
-    return total + Number(item.Stock || 0);
-  }, 0);
+  const totalStock = apiData.reduce(
+    (total, item) => total + Number(item.Stock || 0),
+    0
+  );
 
-  // Low stock = Stock < 10
+  // Low stock = Stock < 20
   const lowStock = apiData.filter(
     (item) => Number(item.Stock) > 0 && Number(item.Stock) < 20
   ).length;
@@ -22,7 +24,7 @@ export default function DashboardCards({ apiData = [] }) {
   // Out of stock = Stock = 0
   const outOfStock = apiData.filter((item) => Number(item.Stock) === 0).length;
 
-  // Dynamic cards (replaces static)
+  // Dynamic summary cards
   const cards = [
     { title: "Total Products", value: totalItems },
     { title: "Total Stock", value: totalStock },
@@ -32,15 +34,15 @@ export default function DashboardCards({ apiData = [] }) {
 
   return (
     <div className="cards-grid">
-      {/* SUMMARY CARDS (Now Dynamic) */}
-      {cards.map((card, i) => (
-        <div key={i} className="card-box">
+      {/* SUMMARY CARDS */}
+      {cards.map((card) => (
+        <div key={card.title} className="card-box">
           <h4>{card.title}</h4>
           <p>{card.value}</p>
         </div>
       ))}
 
-      {/* DO NOT TOUCH THIS — Top Items List */}
+      {/* TOP ITEMS LIST */}
       <div className="top-items-card scroll-card">
         <h3>Top Items</h3>
 

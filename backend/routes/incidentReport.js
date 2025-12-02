@@ -1,5 +1,6 @@
 const express = require("express");
 const db = require("../config/db");
+const logAction = require("../utils/logger");
 
 const router = express.Router();
 
@@ -43,6 +44,14 @@ router.post("/", (req, res) => {
       return res
         .status(500)
         .json({ error: "Failed to create incident report" });
+
+    // Log creation
+    logAction(
+      reportedby_id,
+      "Created incident report",
+      `Incident ID: ${result.insertId}`
+    );
+
     res.json({ success: true, incident_id: result.insertId });
   });
 });
@@ -50,7 +59,7 @@ router.post("/", (req, res) => {
 // PUT update status or description
 router.put("/:id", (req, res) => {
   const id = parseInt(req.params.id, 10);
-  const { status, description } = req.body;
+  const { status, description, updatedBy } = req.body;
 
   if (!id || isNaN(id))
     return res.status(400).json({ error: "Invalid incident ID" });
@@ -83,6 +92,16 @@ router.put("/:id", (req, res) => {
       });
     if (result.affectedRows === 0)
       return res.status(404).json({ error: "Incident not found" });
+
+    // Log update
+    if (updatedBy) {
+      logAction(
+        updatedBy,
+        "Updated incident report",
+        `Incident ID: ${id}, Fields: ${sets.join(", ")}`
+      );
+    }
+
     res.json({ success: true });
   });
 });

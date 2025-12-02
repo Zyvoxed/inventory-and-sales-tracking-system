@@ -1,43 +1,59 @@
 const express = require("express");
 const cors = require("cors");
-
-const app = express();
-app.use(cors());
-app.use(express.json());
-
 const db = require("./config/db");
 
-// Routes
+// Route imports
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
 const productRoutes = require("./routes/product");
 const salesRoutes = require("./routes/sales");
 const salesAggregateRoutes = require("./routes/salesAggregate");
 const incidentReportRoutes = require("./routes/incidentReport");
+const logsRoute = require("./routes/accountslogs");
+
 const createDefaultAdmin = require("./utils/initAdmin");
 
-// Mount routes
+const app = express();
+const PORT = process.env.PORT || 8081;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// API Routes
 app.use("/", authRoutes);
 app.use("/users", userRoutes);
 app.use("/product", productRoutes);
 app.use("/sales", salesRoutes);
 app.use("/sales-aggregate", salesAggregateRoutes);
 app.use("/incident-report", incidentReportRoutes);
+app.use("/audit", logsRoute);
 
-// Test route
+// Health Check Route
 app.get("/", (req, res) => {
-  res.json({ success: "Backend is running" });
+  res.json({ success: true, message: "Backend is running" });
 });
 
-// Connect DB and create default admin
+// Connect DB and initialize default admin
 db.connect((err) => {
   if (err) {
-    console.error("MySQL connection error:", err);
-  } else {
-    console.log("Connected to MySQL");
-    createDefaultAdmin();
+    console.error("❌ MySQL connection error:", err);
+    return;
   }
+
+  console.log("✅ Connected to MySQL database");
+  createDefaultAdmin();
+
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+  });
 });
 
-const PORT = 8081;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Graceful error handling (prevents server crash)
+process.on("uncaughtException", (err) => {
+  console.error("UNCAUGHT EXCEPTION!", err);
+});
+
+process.on("unhandledRejection", (reason) => {
+  console.error("UNHANDLED REJECTION!", reason);
+});

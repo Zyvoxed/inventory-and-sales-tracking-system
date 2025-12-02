@@ -6,7 +6,9 @@ export default function Sales() {
   const [salesList, setSalesList] = useState([]);
   const [search, setSearch] = useState("");
   const [sortOption, setSortOption] = useState("");
-  const [showSort, setShowSort] = useState(false);
+  const [search, setSearch] = useState("");
+
+  const user = JSON.parse(localStorage.getItem("user") || "null"); // Get user ID
 
   useEffect(() => {
     loadSales();
@@ -18,10 +20,17 @@ export default function Sales() {
       .catch(() => alert("Error loading sales"));
   };
 
-  const deleteSale = (id) => {
-    if (!window.confirm("Delete sale?")) return;
+  const deleteSale = (saleId) => {
+    if (!window.confirm("Delete this sale and all its items?")) return;
+    if (!user || !user.user_id) {
+      alert("User not logged in!");
+      return;
+    }
+
     axios
-      .delete(`http://localhost:8081/sales/${id}`)
+      .delete(`http://localhost:8081/sales/${saleId}`, {
+        data: { user_id: user.user_id }, // Send user_id for audit
+      })
       .then(() => {
         alert("Sale deleted");
         loadSales();
@@ -44,8 +53,10 @@ export default function Sales() {
     acc[item.sale_id].push(item);
     return acc;
   }, {});
-  let salesArray = Object.entries(grouped).map(([id, items]) => ({
-    saleId: id,
+
+  // Convert groupedSales to array for sorting
+  let salesArray = Object.entries(groupedSales).map(([saleId, items]) => ({
+    saleId,
     items,
     subtotal: items.reduce((s, i) => s + i.subtotal, 0),
     qty: items.reduce((s, i) => s + i.quantity, 0),
@@ -58,6 +69,8 @@ export default function Sales() {
       i.product_name.toLowerCase().includes(search.toLowerCase())
     )
   );
+
+  // Apply sorting
   if (sortOption === "date-asc") salesArray.sort((a, b) => a.date - b.date);
   if (sortOption === "date-desc") salesArray.sort((a, b) => b.date - a.date);
   if (sortOption === "subtotal-asc")

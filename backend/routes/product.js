@@ -3,20 +3,25 @@ const db = require("../config/db");
 
 const router = express.Router();
 
-// Get all products
+// Get all products with total sold and subtotal
 router.get("/", (req, res) => {
   const sql = `
-    SELECT
-      product_id AS ID,
-      product_name AS Name,
-      category AS Category,
-      quantity_in_stock AS Stock,
-      price AS Price,
-      DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s') AS CreatedAt,
-      DATE_FORMAT(updated_at, '%Y-%m-%d %H:%i:%s') AS UpdatedAt
-    FROM product
-    ORDER BY product_id DESC
+    SELECT 
+      p.product_id AS ID,
+      p.product_name AS Name,
+      p.category AS Category,
+      p.quantity_in_stock AS Stock,
+      p.price AS Price,
+      DATE_FORMAT(p.created_at, '%Y-%m-%d %H:%i:%s') AS CreatedAt,
+      DATE_FORMAT(p.updated_at, '%Y-%m-%d %H:%i:%s') AS UpdatedAt,
+      IFNULL(SUM(sd.quantity), 0) AS Sold,
+      IFNULL(SUM(sd.quantity) * p.price, 0) AS Subtotal
+    FROM product p
+    LEFT JOIN sales_detail sd ON p.product_id = sd.product_id
+    GROUP BY p.product_id
+    ORDER BY p.product_id DESC
   `;
+
   db.query(sql, (err, data) => {
     if (err) return res.status(500).json({ error: err });
     res.json(data);

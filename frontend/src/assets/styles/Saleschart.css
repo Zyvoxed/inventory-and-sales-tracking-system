@@ -2,7 +2,7 @@
 .saleschart-container {
   position: absolute;
   left: 230px;
-  width: 300px;
+  width: 400px;
   padding-top: 60px;
 }
 
@@ -25,7 +25,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   /* Make consistent height */
   height: 36px;
 }
@@ -84,17 +83,18 @@
 .legend-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  /* pushes left and right apart */
   margin-bottom: 12px;
   font-size: 14px;
 }
 
-/* Left grouping: color + name */
+/* Left grouping: color + category name */
 .legend-left {
   display: flex;
   align-items: center;
   gap: 8px;
-  flex: 1;
-  /* pushes price to the right */
+  /* space between color and name */
 }
 
 /* Color box */
@@ -115,7 +115,5 @@
 .legend-amount {
   font-weight: 600;
   color: #374151;
-  margin-left: 20px;
   white-space: nowrap;
 }
-

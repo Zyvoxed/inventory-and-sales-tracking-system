@@ -126,6 +126,7 @@ router.delete("/:id", (req, res) => {
   });
 });
 
+<<<<<<< HEAD
 // Save pending sales: convert pending_sales_detail rows to confirmed sale + sales_detail + stock decrement
 router.post("/save-pending", (req, res) => {
   const { user_id, sale_date } = req.body;

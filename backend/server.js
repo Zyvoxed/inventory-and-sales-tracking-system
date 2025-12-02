@@ -2,6 +2,9 @@
 const express = require("express");
 const mysql = require("mysql");
 const cors = require("cors");
+const bcrypt = require("bcryptjs");
+
+const SALT_ROUNDS = 10;
 const app = express();
 
 app.use(cors());
@@ -41,12 +44,12 @@ app.post("/login", (req, res) => {
     return res.status(400).json({ error: "Missing credentials" });
 
   const sql = `
-    SELECT user_id, username, fullname, role 
-    FROM users 
-    WHERE username=? AND password=? AND role=?
+    SELECT user_id, username, fullname, role, password
+    FROM users
+    WHERE username=? AND role=?
   `;
 
-  db.query(sql, [username, password, role], (err, result) => {
+  db.query(sql, [username, role], (err, result) => {
     if (err) {
       console.error("POST /login error:", err);
       return res.status(500).json({ error: "Server error" });
@@ -55,7 +58,20 @@ app.post("/login", (req, res) => {
     if (result.length === 0)
       return res.status(401).json({ error: "Invalid credentials or wrong login page" });
 
-    res.json({ success: true, user: result[0] });
+    const userRow = result[0];
+    const hash = userRow.password;
+
+    bcrypt.compare(password, hash, (bErr, same) => {
+      if (bErr) {
+        console.error("Bcrypt compare error:", bErr);
+        return res.status(500).json({ error: "Server error" });
+      }
+      if (!same) return res.status(401).json({ error: "Invalid credentials or wrong login page" });
+
+      // Remove password before sending
+      const { password: _p, ...user } = userRow;
+      res.json({ success: true, user });
+    });
   });
 });
 
@@ -83,22 +99,34 @@ app.get("/users", (req, res) => {
 
 // Create user
 app.post("/users", (req, res) => {
-  const { username, password, fullname, role } = req.body;
-  if (!username || !password || !fullname || !role)
-    return res.status(400).json({ error: "Missing fields" });
+  (async () => {
+    const { username, password, fullname, role } = req.body;
+    if (!username || !password || !fullname || !role)
+      return res.status(400).json({ error: "Missing fields" });
 
-  const sql = `
-    INSERT INTO users (username, password, fullname, role, created_at)
-    VALUES (?, ?, ?, ?, NOW())
-  `;
+    const sql = `
+      INSERT INTO users (username, password, fullname, role, created_at)
+      VALUES (?, ?, ?, ?, NOW())
+    `;
 
-  db.query(sql, [username, password, fullname, role], (err) => {
-    if (err) {
-      console.error("POST /users error:", err);
-      return res.status(500).json({ error: err });
+    try {
+      const hash = await bcrypt.hash(password, SALT_ROUNDS);
+      db.query(sql, [username, hash, fullname, role], (err) => {
+        if (err) {
+          console.error("POST /users error:", err);
+          // handle duplicate username more gracefully
+          if (err && err.code === "ER_DUP_ENTRY") {
+            return res.status(409).json({ error: "Username already exists" });
+          }
+          return res.status(500).json({ error: "Failed to create user", details: err.message });
+        }
+        return res.status(201).json({ success: "Account created successfully" });
+      });
+    } catch (e) {
+      console.error("Error hashing password:", e);
+      return res.status(500).json({ error: "Server error" });
     }
-    res.json({ success: "Account created successfully" });
-  });
+  })();
 });
 
 // Delete user

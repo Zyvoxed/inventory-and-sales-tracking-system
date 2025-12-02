@@ -16,14 +16,16 @@ export default function Products() {
   const [showSort, setShowSort] = useState(false);
   const [sortOption, setSortOption] = useState("");
 
-  // ---------------------------------------------------------
-  // FETCH PRODUCTS (Fix invalid date)
-  // ---------------------------------------------------------
+  // Get current logged-in user ID
+  const currentUserId = Number(localStorage.getItem("currentUserId"));
+
+  // -------------------------------
+  // Load Products
+  // -------------------------------
   const loadProducts = () => {
     fetch("http://localhost:8081/product")
       .then((res) => res.json())
       .then((data) => {
-        // Convert SQL string timestamps to JS Date objects
         const mapped = data.map((p) => ({
           ...p,
           CreatedAt: p.CreatedAt
@@ -49,9 +51,7 @@ export default function Products() {
         }));
 
         setProducts(mapped);
-
-        const cats = ["All", ...new Set(mapped.map((p) => p.Category))];
-        setCategories(cats);
+        setCategories(["All", ...new Set(mapped.map((p) => p.Category))]);
       })
       .catch((err) => console.log("Fetch error:", err));
   };
@@ -60,6 +60,9 @@ export default function Products() {
     loadProducts();
   }, []);
 
+  // -------------------------------
+  // Add / Edit Product
+  // -------------------------------
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!form.Name || !form.Stock || !form.Price)
@@ -70,6 +73,7 @@ export default function Products() {
       category: form.Category,
       quantity_in_stock: Number(form.Stock),
       price: Number(form.Price),
+      userId: currentUserId, // Include user ID for audit log
     };
 
     const url = editId
@@ -91,6 +95,9 @@ export default function Products() {
       });
   };
 
+  // -------------------------------
+  // Edit / Delete Product
+  // -------------------------------
   const handleEdit = (p) => {
     setEditId(p.ID);
     setForm({
@@ -104,7 +111,11 @@ export default function Products() {
   const handleDelete = (ID) => {
     if (!ID || !window.confirm("Delete this product?")) return;
 
-    fetch(`http://localhost:8081/product/${ID}`, { method: "DELETE" })
+    fetch(`http://localhost:8081/product/${ID}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId: currentUserId }), // Pass user ID
+    })
       .then((res) => res.json())
       .then((msg) => {
         alert(msg.success || msg.error);
@@ -112,6 +123,9 @@ export default function Products() {
       });
   };
 
+  // -------------------------------
+  // Filter & Sort
+  // -------------------------------
   let filteredProducts = products.filter(
     (p) =>
       (p.Name ?? "").toLowerCase().includes(search.toLowerCase()) &&
@@ -131,6 +145,7 @@ export default function Products() {
     <div className="dashboard">
       <h1 className="page-title">Products</h1>
 
+      {/* Top Controls */}
       <div className="top-controls">
         <input
           type="text"
@@ -138,7 +153,6 @@ export default function Products() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-
         <div className="sort-container">
           <button className="sort-btn" onClick={() => setShowSort(!showSort)}>
             ⇅ Sort By
@@ -182,6 +196,7 @@ export default function Products() {
         </div>
       </div>
 
+      {/* Categories */}
       <div className="category-tabs">
         {categories.map((cat) => (
           <button
@@ -194,6 +209,7 @@ export default function Products() {
         ))}
       </div>
 
+      {/* Product Table */}
       <div className="content-grid">
         <div className="product-table">
           <table>
@@ -234,6 +250,7 @@ export default function Products() {
           </table>
         </div>
 
+        {/* Add/Edit Product Form */}
         <div className="add-product">
           <h2>{editId ? "Edit Product" : "Add Product"}</h2>
           <form onSubmit={handleSubmit}>

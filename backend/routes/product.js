@@ -1,5 +1,6 @@
 const express = require("express");
 const db = require("../config/db");
+const logAction = require("../utils/logger");
 
 const router = express.Router();
 
@@ -30,7 +31,7 @@ router.get("/", (req, res) => {
 
 // Add product
 router.post("/", (req, res) => {
-  const { product_name, category, quantity_in_stock, price } = req.body;
+  const { product_name, category, quantity_in_stock, price, userId } = req.body;
   if (!product_name || !category)
     return res.status(400).json({ error: "Missing fields" });
 
@@ -38,16 +39,24 @@ router.post("/", (req, res) => {
     INSERT INTO product (product_name, category, quantity_in_stock, price, created_at)
     VALUES (?, ?, ?, ?, NOW())
   `;
-  db.query(sql, [product_name, category, quantity_in_stock, price], (err) => {
-    if (err) return res.status(500).json({ error: err });
-    res.json({ success: "Product added" });
-  });
+
+  db.query(
+    sql,
+    [product_name, category, quantity_in_stock, price],
+    (err, result) => {
+      if (err) return res.status(500).json({ error: err });
+
+      // Log action with user ID
+      logAction(userId, "Add Product", `Added product ${product_name}`);
+      res.json({ success: "Product added", productId: result.insertId });
+    }
+  );
 });
 
 // Update product
 router.put("/:id", (req, res) => {
   const { id } = req.params;
-  const { product_name, category, quantity_in_stock, price } = req.body;
+  const { product_name, category, quantity_in_stock, price, userId } = req.body;
   const sql = `
     UPDATE product
     SET product_name=?, category=?, quantity_in_stock=?, price=?, updated_at=NOW()
@@ -58,6 +67,8 @@ router.put("/:id", (req, res) => {
     [product_name, category, quantity_in_stock, price, id],
     (err) => {
       if (err) return res.status(500).json({ error: err });
+
+      logAction(userId, "Update Product", `Updated product ${product_name}`);
       res.json({ success: "Product updated" });
     }
   );
@@ -66,8 +77,11 @@ router.put("/:id", (req, res) => {
 // Delete product
 router.delete("/:id", (req, res) => {
   const { id } = req.params;
+  const userId = req.body?.userId || null;
   db.query("DELETE FROM product WHERE product_id=?", [id], (err) => {
     if (err) return res.status(500).json({ error: err });
+
+    logAction(userId, "Delete Product", `Deleted product ID ${id}`);
     res.json({ success: "Product deleted" });
   });
 });

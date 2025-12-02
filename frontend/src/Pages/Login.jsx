@@ -1,11 +1,10 @@
 import "../assets/styles/Login.css";
 import { useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import { useState } from "react";
 
 function Login() {
   const navigate = useNavigate();
-
-  const [toggled, setToggled] = useState(false); // false = Admin, true = Cashier
+  const [toggled, setToggled] = useState(false); // Admin / Cashier toggle
   const [isFading, setIsFading] = useState(false);
 
   const handleToggle = () => {
@@ -19,7 +18,6 @@ function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const username = e.target.username.value;
     const password = e.target.password.value;
     const role = toggled ? "Cashier" : "Admin";
@@ -35,13 +33,14 @@ function Login() {
         return body;
       })
       .then((data) => {
+        // Store user and current user ID
         localStorage.setItem("user", JSON.stringify(data.user));
-        if (data.user.role === "Admin") navigate("/dashboard");
-        else if (data.user.role === "Cashier") navigate("/cashier");
+        localStorage.setItem("currentUserId", data.user.user_id);
+
+        // Navigate based on role
+        navigate(data.user.role === "Admin" ? "/dashboard" : "/cashier");
       })
-      .catch((err) => {
-        alert(err.message || "Error logging in");
-      });
+      .catch((err) => alert(err.message || "Login error"));
   };
 
   const title = toggled ? "Cashier Login" : "Admin Login";

@@ -1,5 +1,6 @@
 const express = require("express");
 const db = require("../config/db");
+const logAction = require("../utils/logger");
 
 const router = express.Router();
 
@@ -53,6 +54,12 @@ router.post("/", (req, res) => {
                   return db.rollback(() =>
                     res.status(500).json({ error: cErr })
                   );
+
+                logAction(
+                  user_id,
+                  `Recorded sale ID ${saleId}`,
+                  `Total: ${totalAmount}`
+                );
                 return res.json({ success: "Sale recorded", sale_id: saleId });
               });
             }
@@ -77,6 +84,12 @@ router.post("/", (req, res) => {
                       error: `Insufficient stock for product_id ${it.product_id}`,
                     })
                   );
+
+                logAction(
+                  user_id,
+                  `Updated stock for product ID ${it.product_id}`,
+                  `Quantity reduced by ${it.quantity}`
+                );
                 updateStockForItem(index + 1);
               }
             );
@@ -121,6 +134,8 @@ router.delete("/:id", (req, res) => {
     if (err) return res.status(500).json({ error: err });
     db.query("DELETE FROM sale WHERE sale_id=?", [id], (err2) => {
       if (err2) return res.status(500).json({ error: err2 });
+
+      logAction(null, `Deleted sale ID ${id}`);
       res.json({ success: "Sale deleted" });
     });
   });

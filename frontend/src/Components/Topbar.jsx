@@ -15,35 +15,34 @@ export default function Topbar() {
       <h1 className="company-name">Storix</h1>
 
       <div className="user">
-  <img
-    src="https://i.imgflip.com/893yt7.png"
-    alt="User"
-    className="avatar"
-  />
+        <img
+          src="https://i.imgflip.com/893yt7.png"
+          alt="User"
+          className="avatar"
+        />
 
-  {/* INFO SECTION */}
-  <div className="info">
-    <span className="name">{user?.fullname || "User"}</span>
-    <span className="role">{user?.role || "Unknown"}</span>
-  </div>
+        {/* INFO SECTION */}
+        <div className="info">
+          <span className="name">{user?.fullname || "User"}</span>
+          <span className="role">{user?.role || "Unknown"}</span>
+        </div>
 
-  {/* DROPDOWN ARROW IN BOX */}
-  <div
-    className="arrow-container"
-    onClick={() => setOpen(!open)}
-  >
-    <span className={`user-arrow ${open ? "open" : ""}`}></span>
-  </div>
+        {/* DROPDOWN ARROW IN BOX */}
+        <div
+          className="arrow-container"
+          onClick={() => setOpen(!open)}
+        >
+          <span className={`user-arrow ${open ? "open" : ""}`}></span>
+        </div>
 
-  {/* DROPDOWN MENU */}
-  {open && (
-    <div className="user-dropdown">
-      <ul>
-        <li onClick={handleLogout}>Logout</li>
-      </ul>
-    </div>
-  )}
-</div>
+        {/* DROPDOWN MENU (always in DOM) */}
+        <div className={`user-dropdown ${open ? "open" : ""}`}>
+          <ul>
+            <li onClick={handleLogout}>Logout</li>
+          </ul>
+        </div>
+      </div>
+
 
     </header>
   );

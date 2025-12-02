@@ -120,17 +120,29 @@
 /* ===========================
    DROPDOWN MENU
    =========================== */
+/* Dropdown menu */
 .user-dropdown {
   position: absolute;
   top: 60px;
-  /* sits properly below user section */
   right: 0;
-  /* aligns directly under arrow */
   width: 150px;
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   z-index: 2000;
+
+  /* Animation */
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+/* Active/open state */
+.user-dropdown.open {
+  max-height: 200px;
+  /* should be larger than content height */
+  opacity: 1;
 }
 
 .user-dropdown ul {

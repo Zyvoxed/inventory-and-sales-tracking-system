@@ -19,6 +19,15 @@ import IncidentReport from "./Pages/IncidentReport";
 import { ThemeProvider } from "./Context/ThemeContext";
 import "./assets/styles/App.css";
 
+// Protected Route wrapper
+function ProtectedRoute({ children }) {
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+  if (!user) {
+    return <Navigate to="/admin-login" replace />;
+  }
+  return children;
+}
+
 function AppLayout() {
   const location = useLocation();
   const user = JSON.parse(localStorage.getItem("user") || "null");
@@ -28,7 +37,6 @@ function AppLayout() {
 
   return (
     <div className="app-layout">
-      {/* Show sidebar except when on public routes OR logged-in user is a Cashier */}
       {!hideLayout &&
         user &&
         !(user.role && user.role.toLowerCase() === "cashier") && <Sidebar />}
@@ -42,41 +50,58 @@ function AppLayout() {
           {/* Login */}
           <Route path="/admin-login" element={<Login />} />
 
-          {/* Shared routes (Admin & Cashier) */}
+          {/* Protected Routes */}
           <Route
             path="/dashboard"
-            element={user ? <Dashboard /> : <Navigate to="/admin-login" />}
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
           />
-
           <Route
             path="/products"
-            element={user ? <Products /> : <Navigate to="/admin-login" />}
+            element={
+              <ProtectedRoute>
+                <Products />
+              </ProtectedRoute>
+            }
           />
-
           <Route
             path="/sales"
-            element={user ? <Sales /> : <Navigate to="/admin-login" />}
+            element={
+              <ProtectedRoute>
+                <Sales />
+              </ProtectedRoute>
+            }
           />
-
           <Route
             path="/settings"
-            element={user ? <Accounts /> : <Navigate to="/admin-login" />}
+            element={
+              <ProtectedRoute>
+                <Accounts />
+              </ProtectedRoute>
+            }
           />
-
-          {/* INCIDENT REPORT (NEW) */}
           <Route
             path="/incident-report"
-            element={user ? <IncidentReport /> : <Navigate to="/admin-login" />}
+            element={
+              <ProtectedRoute>
+                <IncidentReport />
+              </ProtectedRoute>
+            }
           />
-
-          {/* Cashier */}
           <Route
             path="/cashier"
-            element={user ? <Cashier /> : <Navigate to="/admin-login" />}
+            element={
+              <ProtectedRoute>
+                <Cashier />
+              </ProtectedRoute>
+            }
           />
 
           {/* Fallback */}
-          <Route path="/*" element={<Navigate to="/admin-login" />} />
+          <Route path="/*" element={<Navigate to="/admin-login" replace />} />
         </Routes>
       </div>
     </div>

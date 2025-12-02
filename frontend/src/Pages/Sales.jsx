@@ -7,22 +7,56 @@ export default function Sales() {
   const [showSort, setShowSort] = useState(false);
   const [sortOption, setSortOption] = useState("");
   const [search, setSearch] = useState(""); // Added search state
+  // Helper to get today's date in local yyyy-mm-dd format
+  const getTodayLocalDateString = () => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  };
+
+  const [selectedDate, setSelectedDate] = useState(getTodayLocalDateString());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
+    // ensure selected date defaults to today on mount/navigation
+    setSelectedDate(getTodayLocalDateString());
     loadSales();
   }, []);
 
   const loadSales = () => {
-    axios
-      .get("http://localhost:8081/sales")
-      .then((res) => setSalesList(res.data))
-      .catch(() => alert("Error loading sales"));
+    // Load both confirmed sales and pending cashier transactions
+    Promise.all([
+      axios.get("http://localhost:8081/sales"),
+      axios.get("http://localhost:8081/pending-sales"),
+    ])
+      .then(([confirmed, pending]) => {
+        // Combine arrays so both confirmed and pending entries appear in Sales History
+        const combined = (confirmed.data || []).concat(pending.data || []);
+        setSalesList(combined);
+      })
+      .catch((err) => {
+        console.error("Error loading sales:", err);
+        alert("Error loading sales");
+      });
   };
 
   const deleteSale = (saleId) => {
     if (!window.confirm("Delete this sale and all its items?")) return;
+    // pending sale ids are prefixed with 'pending_'
+    if (String(saleId).startsWith("pending_")) {
+      const id = saleId.split("_")[1];
+      axios
+        .delete(`http://localhost:8081/pending-sales/${id}`)
+        .then(() => {
+          alert("Pending item deleted!");
+          loadSales();
+        })
+        .catch(() => alert("Error deleting pending item"));
+      return;
+    }
+
     axios
-      .delete(`http://localhost:8081/sale/${saleId}`)
+      .delete(`http://localhost:8081/sales/${saleId}`)
       .then(() => {
         alert("Sale deleted!");
         loadSales();
@@ -58,6 +92,22 @@ export default function Sales() {
     date: new Date(items[0].sale_date),
   }));
 
+  // Helper: convert server datetime to local yyyy-mm-dd
+  const toLocalDateString = (datetimeStr) => {
+    const d = new Date(datetimeStr);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
+      d.getDate()
+    ).padStart(2, "0")}`;
+  };
+
+  // Filter by selected date (if provided)
+  if (selectedDate) {
+    salesArray = salesArray.filter((sale) => {
+      const saleDateStr = toLocalDateString(sale.items[0].sale_date);
+      return saleDateStr === selectedDate;
+    });
+  }
+
   // Apply search filter
   salesArray = salesArray.filter((sale) =>
     sale.items.some((i) =>
@@ -75,11 +125,38 @@ export default function Sales() {
   if (sortOption === "qty-asc") salesArray.sort((a, b) => a.qty - b.qty);
   if (sortOption === "qty-desc") salesArray.sort((a, b) => b.qty - a.qty);
 
-  const saveSale = () => {
-    alert(
-      "Use the cashier/POS to record a sale. This button is a placeholder."
-    );
-    loadSales();
+  const saveSale = async () => {
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    if (!user || !user.user_id) {
+      alert("User not logged in!");
+      return;
+    }
+
+    // Check if there are any pending sales for the selected date
+    const hasPendingSales = salesList.some((item) => {
+      const saleDateStr = toLocalDateString(item.sale_date);
+      return saleDateStr === selectedDate && String(item.sale_id || "").startsWith("pending_");
+    });
+
+    if (!hasPendingSales) {
+      alert(`No pending sales to save for ${selectedDate}`);
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const res = await axios.post("http://localhost:8081/sales/save-pending", {
+        user_id: user.user_id,
+        sale_date: selectedDate,
+      });
+      alert(`Pending sales confirmed! Sale ID: ${res.data.sale_id}`);
+      loadSales();
+    } catch (err) {
+      console.error("Save pending sale error:", err);
+      alert(`Error saving sale: ${err.response?.data?.error || err.message}`);
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -87,9 +164,39 @@ export default function Sales() {
       <h1 className="page-title">Sales History</h1>
 
       <div className="top-controls">
-        <div>
-          <button onClick={saveSale} className="save-btn">
-            Save Sale
+        <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+          {/* Date Picker Dropdown */}
+          <div className="sort-container">
+            <button
+              className="sales-sort-btn"
+              onClick={() => setShowDatePicker(!showDatePicker)}
+              style={{ background: "#2563eb" }}
+            >
+              📅 {selectedDate}
+            </button>
+
+            {showDatePicker && (
+              <div className="sales-sort-dropdown">
+                <input
+                  type="date"
+                  value={selectedDate}
+                  onChange={(e) => {
+                    setSelectedDate(e.target.value);
+                    setShowDatePicker(false);
+                  }}
+                  style={{ padding: "8px", cursor: "pointer" }}
+                />
+              </div>
+            )}
+          </div>
+
+          <button
+            onClick={saveSale}
+            className="save-btn"
+            disabled={saving}
+            style={{ cursor: saving ? "not-allowed" : "pointer", opacity: saving ? 0.6 : 1 }}
+          >
+            {saving ? "Saving..." : "Save Sale"}
           </button>
         </div>
         <input
@@ -176,19 +283,55 @@ export default function Sales() {
             </tr>
           </thead>
           <tbody>
-            {salesArray.map((sale) => (
-              <tr key={sale.saleId}>
-                <td>{sale.items.map((i) => i.product_name).join(", ")}</td>
-                <td>{sale.qty}</td>
-                <td>₱{sale.subtotal}</td>
-                <td>{formatDate12(sale.items[0].sale_date)}</td>
-                <td>
-                  <button onClick={() => deleteSale(sale.saleId)}>
-                    Remove
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {(() => {
+              // Render rows with date-category headers
+              const rows = [];
+              let prevDate = null;
+              // Ensure salesArray is sorted by date desc for grouping
+              const sorted = [...salesArray].sort((a, b) => b.date - a.date);
+              for (const sale of sorted) {
+                const saleDateStr = toLocalDateString(sale.items[0].sale_date);
+                if (saleDateStr !== prevDate) {
+                  rows.push(
+                    <tr key={`header-${saleDateStr}`} className="date-header-row">
+                      <td colSpan="5" style={{ fontWeight: 700, padding: "8px 12px" }}>
+                        {new Date(saleDateStr).toLocaleDateString(undefined, {
+                          weekday: "short",
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </td>
+                    </tr>
+                  );
+                  prevDate = saleDateStr;
+                }
+
+                rows.push(
+                  <tr key={sale.saleId}>
+                    <td>{sale.items.map((i) => i.product_name).join(", ")}</td>
+                    <td>{sale.qty}</td>
+                    <td>₱{sale.subtotal}</td>
+                    <td>{formatDate12(sale.items[0].sale_date)}</td>
+                    <td>
+                      <button onClick={() => deleteSale(sale.saleId)}>  
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                );
+              }
+              if (rows.length === 0) {
+                return (
+                  <tr>
+                    <td colSpan="5" style={{ textAlign: "center", padding: "20px" }}>
+                      No sales found for {selectedDate}
+                    </td>
+                  </tr>
+                );
+              }
+              return rows;
+            })()}
           </tbody>
         </table>
       </div>

@@ -13,7 +13,6 @@ const pendingSalesRoutes = require("./routes/pendingSales");
 const createDefaultAdmin = require("./utils/initAdmin");
 
 const app = express();
-const PORT = process.env.PORT || 8081;
 
 // Middleware
 app.use(cors());
